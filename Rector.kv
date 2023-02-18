@@ -1,0 +1,31 @@
+<Rector>:
+    id: rector
+    name: 'rector'
+
+    MDBoxLayout:
+        orientation: 'vertical'
+        pos_hint: {'center_x': .5, 'center_y': .5}
+        
+        MDTabs:
+            background_color: (237/255, 162/255, 22/255, .75)
+            on_tab_switch: app.root.get_screen('rectory').setTab(False, *args)
+
+            Add:
+                id: add
+                name: 'add'
+
+                title: 'Agregar'
+            
+            Update:
+                id: upd
+                name: 'upd'
+
+                title: 'Actualizar'
+            
+            Delete:
+                id: del
+                name: 'del'
+
+                title: 'Eliminar'
+
+        

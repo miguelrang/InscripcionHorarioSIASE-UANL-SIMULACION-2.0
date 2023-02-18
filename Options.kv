@@ -1,0 +1,132 @@
+<ROption>:
+    text: root.label
+    on_release:
+        options = app.root.get_screen('options')
+        if root.label not in options.selected:\
+        options.selected.append(root.label), app.showBanner(f'{root.label}', 'Se ha seleccionado.', 'options')
+        else:\
+        options.selected.remove(root.label), app.showBanner(f'{root.label}', 'Se ha desmarcado.', 'options')
+
+Options:
+	id: options
+	name: 'options'
+
+    MDFloatLayout:
+        cols: 1
+        md_bg_color: (0, 0, 0, 1)
+        Image:
+            allow_stretch: True
+            opacity: .5
+            source: "images/wallpaper-rectory.png"
+
+        MDBoxLayout:
+            id: layout
+            name: 'layout'
+
+            orientation: 'vertical'
+            padding: dp(0), dp(0), dp(0), dp(10)
+            spacing: dp(10)
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            MDToolbar:
+                id: tool_bar
+                name: 'tool_bar'
+
+                title: 'Inscripciones'
+                md_bg_color: (237/255, 162/255, 22/255, .5)
+                right_action_items: [['exit-to-app', lambda x: root.exit(recycle)]]
+            
+            MDBoxLayout:
+                orientation: 'vertical'
+                size_hint: (.35, .9)
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                padding: dp(10), dp(5), dp(10), dp(5)
+                
+                canvas.before:
+                    Color:
+                        rgba: (1, 1, 1, 1)
+                    
+                    RoundedRectangle:
+                        size: self.size
+                        pos: self.pos
+                    
+                    Color:
+                        rgba: (.5, .5, .5, 1)
+                    
+                    Line:
+                        rounded_rectangle: [self.pos[0], self.pos[1], self.size[0], self.size[1], 10, 10, 10, 10]
+                        width: 1.5
+                    
+                    Color:
+                        rgba: (237/255, 162/255, 22/255, .5)
+                    
+                    Line:
+                        rounded_rectangle: [self.pos[0], self.pos[1], self.size[0], self.size[1], 10, 10, 10, 10]
+        
+                RecycleView:
+                    id: recycle
+                    name: 'recycle'
+
+                    key_viewclass: 'viewclass'
+                    pos_hint: {'center_x': .5, 'center_y': .5}
+                    key_size: 'height'
+
+                    RecycleBoxLayout:
+                        id: recycle_grid
+                        name: 'recycle_grid'
+
+                        orientation: 'vertical'
+                        spacing: dp(5)
+                        default_size: None, dp(48)
+                        default_size_hint: 1, None
+                        size_hint_y: None
+                        height: self.minimum_height
+
+            Button:
+                text: 'Guardar'
+                font_size: dp(20)
+                size_hint: (.34, .1)
+                background_color: (0, 0, 0, 0)
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                on_press: self.background_color = (.3, .3, .3, 1)
+                on_release:
+                    self.background_color = (0, 0, 0, 0)
+                    root.addSelected(root.forms, root.option, root.field, root.selected)
+                    app.root.current='rectory'
+
+                canvas.before:
+                    Color:
+                        rgba: (5/255, 57/255, 110/255, 1)
+                    
+                    RoundedRectangle:
+                        size: self.size
+                        pos: self.pos
+
+        MDLabel:
+            id: enrollment
+            name: "emrollment"
+
+            text: ""
+            font_size: dp(20)
+            markup: True
+            pos_hint: {"center_y": .7}
+            x: 20
+        
+        MDLabel:
+            id: employee
+            name: "employee"
+
+            text: ""
+            font_size: dp(20)
+            markup: True
+            y: enrollment.pos[1]-30
+            x: 20
+        
+        MDBanner:
+            id: banner
+            name: 'banner'
+
+            type: "two-line"
+            text: ['', '']
+            left_action: ["CANCELAR", lambda x: None]
+            over_widget: layout
+            vertical_pad: tool_bar.height

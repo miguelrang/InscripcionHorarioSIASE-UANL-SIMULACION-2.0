@@ -1,0 +1,95 @@
+<RSearch>:
+    MDBoxLayout:
+        name: root.name
+
+        orientation: "horizontal"
+        disabled: root.disabled
+
+        canvas.before:
+            Color:
+                rgba: (5/255, 57/255, 110/255, .7)
+
+            Line:
+                points: [self.pos[0], self.pos[1]-5, self.size[0], self.pos[1]-5]
+                width: 1.2
+
+        MDTextFieldRect:
+            id: search_field
+
+            text: root.text
+            hint_text: "Matricula"
+            multiline: False
+            input_filter: "int"
+            size_hint_y: .77
+            on_text_validate: app.root.get_screen('rectory').text_validate("", self, self.text, 100, False)
+                
+        MDRectangleFlatButton:
+            text: 'Buscar'
+            theme_text_color: 'Custom'
+            text_color: (81/255, 138/255, 114/255, 1)
+            line_color: (81/255, 138/255, 114/255, 1)
+            on_release: app.root.get_screen('rectory').text_validate("", self, search_field.text, 100, False)
+
+<RTextField>:
+	multiline: False
+    hint_text: root.hint
+    on_text:
+        if 'name' in root.name:\
+        self.text, leng = self.text.title(), 30
+        elif root.name == 'middle_name' or root.name == 'last_name':\
+        self.text, leng = self.text.replace(' ', ''), 20
+        elif root.name == 'pass':\
+        leng = 16
+        elif root.name == 'email':\
+        leng = 40
+        else:\
+        leng = 10
+
+        self.text = self.text[:leng]
+    on_focus:
+        if self.focus == root.boolean:\
+        app.root.get_screen('rectory').text_validate(root.name, self, self.text, root.length, root.spaces)
+
+<RLabel>:
+	text: root.text
+	markup: True
+	halign: root.halign
+	valign: root.valign
+
+<RButtons>:
+	MDFlatButton:
+		id: cancel
+
+		text: 'Cancelar'
+		theme_text_color: "Custom"
+		text_color: (81/255, 138/255, 114/255, 1)
+		halign: 'right'
+		valign: 'center'
+        on_release: 
+            rectory = app.root.get_screen("rectory")
+            rectory.setInititalData(tab=rectory.main_tab, sub_tab=rectory.secondary_tab)
+            rectory.clearWidgets(tab=rectory.main_tab, sub_tab=rectory.secondary_tab)
+		pos_hint: {"center_y": .3, "right": 1}
+		
+	MDRaisedButton:
+		text: root.text
+        disabled: root.disable
+		theme_text_color: 'Custom'
+		text_color: (1, 1, 1, 1)
+		md_bg_color: (81/255, 138/255, 114/255, 1)
+		x: cancel.x - cancel.size[0] - 20
+		pos_hint: {"center_y": .3}
+        on_release: 
+            rectory = app.root.get_screen("rectory")
+            rectory.alterTable(rectory.main_tab, rectory.secondary_tab, rectory.tab[rectory.main_tab][rectory.secondary_tab])
+
+<ROptions>:
+    on_focus:
+        rectory = app.root.get_screen('rectory')
+        if self.focus == True:\
+        rectory.showOptions(forms=rectory.ids[rectory.main_tab].ids[rectory.secondary_tab], field=self, enrollment=rectory.ids.enrollment.text, employee=rectory.ids.employee.text)
+
+
+
+
+

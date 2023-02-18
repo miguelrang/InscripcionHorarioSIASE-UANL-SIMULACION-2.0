@@ -1,0 +1,757 @@
+SIASE:
+    id: siase
+    name: 'siase'
+
+    MDBoxLayout:
+        orientation: 'vertical'
+        md_bg_color: (1, 1, 1, 1)
+
+        MDBoxLayout:
+            size_hint_y: .225
+            padding: dp(10), dp(0), dp(0), dp(0)
+
+            canvas.after:
+                Color:
+                    rgb: (0, 0, 0)
+                
+                Line:
+                    points: self.pos[0], self.pos[1]-5, self.size[0], self.pos[1]-5
+                    width: 1.4
+
+            Image:
+                allow_stretch: True
+                size_hint_x: .6
+                source: 'images/logo-siase.png'
+            
+            MDLabel:
+                text: '[color=#AAAAAA][b]FOTO\nNO\nDISPONIBLE[/b][/color]'
+                markup: True
+                size_hint_x: .25
+                halign: 'center'
+                valign: 'center'
+
+                canvas.before:
+                    Color:
+                        rgb: (0, 0, 0)
+                    
+                    Line:
+                        rectangle: self.pos[0], self.pos[1], self.size[0], self.size[1]
+
+            MDBoxLayout:
+                orientation: 'vertical'
+                size_hint_x: 2.3
+
+                MDBoxLayout:
+                    orienation: 'horizontal'
+
+                    MDBoxLayout:
+                        orientation: 'vertical'
+                        size_hint_x: .55
+                        padding: dp(4), dp(0), dp(0), dp(2)
+
+                        MDLabel:
+                            id: enrollment
+                            name: 'enrollment'
+
+                            text: '[b]Matricula:[/b] 1841631'
+                            font_size: dp(12)
+                            markup: True
+                        
+                        MDLabel:
+                            id: full_name
+                            name: 'full_name'
+                            text: '[b]Nombre:[/b] MIGUEL ANGEL GUERRA RANGEL'
+                            font_size: dp(12)
+                            markup: True
+                        
+                        MDLabel:
+                            id: career
+                            name: 'career'
+
+                            text: '[b]Carrera:[/b] LIC. EN SEGURIDAD EN TEC. DE INFORMACIÓN'
+                            font_size: dp(12)
+                            markup: True
+                        
+                    Image:
+                        source: 'images/logo-uanl.png'
+                        size_hint: (.35, .85)
+                        pos_hint: {'center_x': .5, 'center_y': .5}
+                        allow_stretch: True
+                    
+                    MDLabel:
+                        text: 'UNIVERSIDAD AUTONOMA DE NUEVO LEÓN'
+                        halign: 'left'
+                        valign: 'center'
+                        font_size: dp(28)
+
+                        canvas.before:
+                            Color:
+                                rgb: (0, 0, 0)
+                            
+                            Line:
+                                points: self.pos[0]-15, self.pos[1], self.pos[0]-15, self.pos[1] + self.size[1]
+                                width: 1.1
+                    
+                    Image:
+                        source: 'images/logo-fcfm.png'
+                        size_hint_x: .25
+                        allow_stretch: True
+
+                MDBoxLayout:
+                    orientation: 'horizontal'
+                    size_hint_y: .15
+                    md_bg_color: (5/255, 57/255, 110/255, 1)
+                    padding: dp(4), dp(6), dp(4), dp(0)
+                    spacing: dp(15)
+
+                    canvas.before:
+                        Color:
+                            rgba: (5/255, 57/255, 110/255, 1)
+                        
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos[0], self.pos[1]-5
+                                        
+                    MDTextButton:
+                        text: '[color=#ffffff][size=12]Escolar[/size][/color]'
+                        halign: 'center'
+                        valign: 'center'
+                        markup: True
+                        on_press: app.openDialog(title='Lo sentimos', text='Servicio no disponible.')
+                    
+                    MDTextButton:
+                        text: '[color=#ffffff][size=12]Tesoreria[/size][/color]'
+                        halign: 'center'
+                        valign: 'center'
+                        markup: True
+                        on_press: app.openDialog(title='Lo sentimos', text='Servicio no disponible.')
+                    
+                    MDTextButton:
+                        text: '[color=#ffffff][size=12]DGPPE[/size][/color]'
+                        halign: 'center'
+                        valign: 'center'
+                        markup: True
+                        on_press: app.openDialog(title='Lo sentimos', text='Servicio no disponible.')
+                    
+                    MDTextButton:
+                        text: '[color=#ffffff][size=12]AFI[/size][/color]'
+                        halign: 'center'
+                        valign: 'center'
+                        markup: True
+                        on_press: app.openDialog(title='Lo sentimos', text='Servicio no disponible.')
+                    
+                    MDTextButton:
+                        text: '[color=#ffffff][size=12]EXCI[/size][/color]'
+                        halign: 'center'
+                        valign: 'center'
+                        markup: True
+                        on_press: app.openDialog(title='Lo sentimos', text='Servicio no disponible.')
+                    
+                    MDTextButton:
+                        text: '[color=#ffffff][size=12]Contraseña[/size][/color]'
+                        halign: 'center'
+                        valign: 'center'
+                        markup: True
+                        on_press: app.openDialog(title='Lo sentimos', text='Servicio no disponible.')
+                    
+                    MDTextButton:
+                        text: '[color=#ffffff][size=12]Escolar[/size][/color]'
+                        halign: 'center'
+                        valign: 'center'
+                        markup: True
+                        on_press: app.openDialog(title='Lo sentimos', text='Servicio no disponible.')
+                    
+                    MDTextButton:
+                        text: '[color=#ffffff][size=12]Clave de Seguridad[/size][/color]'
+                        halign: 'center'
+                        valign: 'center'
+                        markup: True
+                        on_press: app.openDialog(title='Lo sentimos', text='Servicio no disponible.')
+                    
+                    MDTextButton:
+                        text: '[color=#ffffff][size=12]Aviso de Privacidad[/size][/color]'
+                        halign: 'center'
+                        valign: 'center'
+                        markup: True
+                        on_press: app.openDialog(title='Lo sentimos', text='Servicio no disponible.')
+                    
+                    MDTextButton:
+                        text: '[color=#ffffff][size=12]Salir[/size][/color]'
+                        halign: 'center'
+                        valign: 'center'
+                        markup: True
+                        on_press: 
+                            app.root.current = 'login'
+                            app.resizeWindow(size=(700, 450), left=350, top=150)
+                            app.root.get_screen('login').ids.account.text=''
+                            app.root.get_screen('login').ids.passw.text=''
+
+                    MDIconButton:
+                        icon: 'facebook'
+                        theme_text_color: 'Custom'
+                        text_color: (5/255, 57/255, 110/255, 1)
+                        pos_hint: {'center_x': .5, 'center_y': .65}
+                        user_font_size: '15sp'
+                        on_press: app.openDialog(title='Lo sentimos', text='Servicio no disponible.')
+
+                        canvas.before:
+                            Color:
+                                rgba: (234/255, 173/255, 49/255, 1)
+                            
+                            Rectangle:
+                                size: self.size[0]/2, self.size[1]/2
+                                pos: self.pos[0]+self.size[0]/4, self.pos[1]+self.size[1]/4
+                        
+                    MDIconButton:
+                        icon: 'twitter'
+                        theme_text_color: 'Custom'
+                        text_color: (5/255, 57/255, 110/255, 1)
+                        pos_hint: {'center_x': .5, 'center_y': .65}
+                        user_font_size: '15sp'
+                        on_press: app.openDialog(title='Lo sentimos', text='Servicio no disponible.')
+
+                        canvas.before:
+                            Color:
+                                rgba: (234/255, 173/255, 49/255, 1)
+                            
+                            Rectangle:
+                                size: self.size[0]/2, self.size[1]/2
+                                pos: self.pos[0]+self.size[0]/4, self.pos[1]+self.size[1]/4
+        MDGridLayout:
+            cols: 2
+            padding: dp(0), dp(10), dp(0), dp(0)
+
+            ScrollView:
+                do_scroll_y: True
+                size_hint_x: .25
+
+                MDGridLayout:
+                    id: scroller
+                    name: 'scroller'
+
+                    cols: 1
+                    adaptive_height: True
+                    padding: dp(5), dp(0), dp(2), dp(0)
+                    spacing: dp(8)
+                    md_bg_color: (5/255, 57/255, 110/255, 1)
+
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Subir Foto del Alumno'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo sentimos', text='Servicio no disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+                    
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Carga de Documentos'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo sentimos', text='Servicio no disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+                    
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Situación estudiante UANL'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo sentimos', text='Servicio no disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+                    
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Inscripción'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: root.inscription(root.enrollment)
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+                    
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Becas'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo sentimos', text='Servicio no disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+                    
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Kardex'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: root.showKardex(root.enrollment)
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+                    
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Horario'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo sentimos', text='Servicio no disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+                    
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Calificaciones'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo sentimos', text='Servicio no disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+                    
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Datos Personales'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo sentimos', text='Servicio no disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+                    
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Aviso de Pago'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo sentimos', text='Servicio no disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+                    
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Consulta Fecha Inscripción'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo sentimos', text='Servicio no disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+                    
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Consulta de Evaluación'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo Sentimos', text='Servicio no Disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+                    
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Cuotas Escolares Rectoria'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo Sentimos', text='Servicio no Disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+                    
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Selección Especialidad'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo Sentimos', text='Servicio no Disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+                    
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Aviso de Inscripción'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo Sentimos', text='Servicio no Disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Otros Adeudos'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo Sentimos', text='Servicio no Disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Encuestas'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo Sentimos', text='Servicio no Disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Encuestas Tutoria'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo Sentimos', text='Servicio no Disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Registro Servicio Social'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo Sentimos', text='Servicio no Disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Formato Inscripción Social'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo Sentimos', text='Servicio no Disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Trámites DEyA'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo Sentimos', text='Servicio no Disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Boletas Pago EXENS'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo Sentimos', text='Servicio no Disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Incripción PROVERICYT'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo Sentimos', text='Servicio no Disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Programa Futbol Americano'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo Sentimos', text='Servicio no Disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Calificaciones'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo Sentimos', text='Servicio no Disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Comercio Electrónico'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo Sentimos', text='Servicio no Disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Calificaciones'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo Sentimos', text='Servicio no Disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Cuestionario Huella CO2'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo Sentimos', text='Servicio no Disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Registro IMSS'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo Sentimos', text='Servicio no Disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Encuesta - CEV'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo Sentimos', text='Servicio no Disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Solicitud de Baja Voluntaria'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo Sentimos', text='Servicio no Disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+
+                    MDLabel:
+                        text: ''
+                                
+                    MDTextButton:
+                        text: 'Prácticas Profesionales'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo Sentimos', text='Servicio no Disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+
+                    MDLabel:
+                        text: ''
+
+                    MDTextButton:
+                        text: 'Voluntariado'
+                        theme_text_color: 'Custom'
+                        text_color: (1, 1, 1, 1)
+                        on_press: app.openDialog(title='Lo Sentimos', text='Servicio no Disponible.')
+                        canvas.before:
+                            Color:
+                                rgba: (1, 1, 1, 1)
+                                
+                            Line:
+                                points: scroller.pos[0], self.pos[1]-6, scroller.size[0], self.pos[1]-6
+                    
+                    MDLabel:
+                        text: ''
+                    
+            MDBoxLayout:
+                orientation: 'vertical'
+
+                RecycleView:
+                    id: recycle
+                    name: 'recycle'
+
+                    key_viewclass: 'viewclass'
+                    pos_hint: {'center_x': .5, 'center_y': .5}
+                    key_size: 'height'
+
+                    RecycleBoxLayout:
+                        id: recycle_grid
+                        name: 'recycle_grid'
+
+                        orientation: 'vertical'
+                        #padding: dp(5), dp(5), dp(300), dp(5)
+                        default_size: None, dp(48)
+                        default_size_hint: 1, None
+                        size_hint_y: None
+                        height: self.minimum_height    
+
