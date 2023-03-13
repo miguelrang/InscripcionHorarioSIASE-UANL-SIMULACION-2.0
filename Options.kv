@@ -2,11 +2,121 @@
     text: root.label
     on_release:
         options = app.root.get_screen('options')
-        if root.label not in options.selected:\
+        if app.root.get_screen('rectory').main_tab == 'student' and len(options.selected) == 3 and root.label not in options.selected:\
+        app.showBanner('¡Número Máximo de Facultades y/o Carreras!', 'En la UANL solo puedes cursar o haber cursado un total de 3 carreras.', 'options')
+        elif (root.label not in options.selected):\
         options.selected.append(root.label), app.showBanner(f'{root.label}', 'Se ha seleccionado.', 'options')
         else:\
         options.selected.remove(root.label), app.showBanner(f'{root.label}', 'Se ha desmarcado.', 'options')
 
+<RKardexSubject>:
+    orientation: 'horizontal'
+    # subject
+    MDLabel:
+        text: root.subject
+        size_hint_x: 5
+        halign: 'left'
+        valign: 'center'
+
+        canvas.before:
+            Color:
+                rgba: root.rgba
+
+            Rectangle:
+                size: self.size
+                pos: self.pos
+    # op1
+    MDGridLayout:
+        colos: 1
+
+        canvas.before:
+            Color:
+                rgba: root.rgba
+            
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+        MDTextField:
+            hint_text: 'Opo.1'
+            line_color_normal: (0, 0, 0, 1)
+            line_color_focus: root.rgba
+    
+    MDGridLayout:
+        colos: 1
+
+        canvas.before:
+            Color:
+                rgba: root.rgba
+            
+            Rectangle:
+                size: self.size
+                pos: self.pos
+                
+        MDTextField:
+            hint_text: 'Opo.2'
+            line_color_focus: root.rgba
+    
+    MDGridLayout:
+        colos: 1
+
+        canvas.before:
+            Color:
+                rgba: root.rgba
+            
+            Rectangle:
+                size: self.size
+                pos: self.pos
+                
+        MDTextField:
+            hint_text: 'Opo.2'
+            line_color_focus: root.rgba
+    
+    MDGridLayout:
+        colos: 1
+
+        canvas.before:
+            Color:
+                rgba: root.rgba
+            
+            Rectangle:
+                size: self.size
+                pos: self.pos
+                
+        MDTextField:
+            hint_text: 'Opo.3'
+            line_color_focus: root.rgba
+    
+    MDGridLayout:
+        colos: 1
+
+        canvas.before:
+            Color:
+                rgba: root.rgba
+            
+            Rectangle:
+                size: self.size
+                pos: self.pos
+                
+        MDTextField:
+            hint_text: 'Opo.4'
+            line_color_focus: root.rgba
+    
+    MDGridLayout:
+        colos: 1
+
+        canvas.before:
+            Color:
+                rgba: root.rgba
+            
+            Rectangle:
+                size: self.size
+                pos: self.pos
+                
+        MDTextField:
+            hint_text: 'Opo.5'
+            line_color_focus: root.rgba
+    
 Options:
 	id: options
 	name: 'options'

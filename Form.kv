@@ -1,95 +1,116 @@
 <RSearch>:
     MDBoxLayout:
-        name: root.name
-
-        orientation: "horizontal"
-        disabled: root.disabled
-
-        canvas.before:
-            Color:
-                rgba: (5/255, 57/255, 110/255, .7)
-
-            Line:
-                points: [self.pos[0], self.pos[1]-5, self.size[0], self.pos[1]-5]
-                width: 1.2
-
+        orientation: 'horizontal'
+        spacing: dp(5)
+        padding: dp(1), dp(0), dp(1), dp(0)
+        adaptive_height: True
+        
         MDTextFieldRect:
             id: search_field
 
-            text: root.text
             hint_text: "Matricula"
+            line_anim: False
             multiline: False
             input_filter: "int"
-            size_hint_y: .77
-            on_text_validate: app.root.get_screen('rectory').text_validate("", self, self.text, 100, False)
+            #size_hint_y: .77
+            on_text_validate: 
+                rectory = app.root.get_screen('rectory')
+                app.root.get_screen('rectory').search(self, self.text, 10, rectory.main_tab, rectory.secondary_tab)
                 
         MDRectangleFlatButton:
             text: 'Buscar'
             theme_text_color: 'Custom'
             text_color: (81/255, 138/255, 114/255, 1)
             line_color: (81/255, 138/255, 114/255, 1)
-            on_release: app.root.get_screen('rectory').text_validate("", self, search_field.text, 100, False)
+            on_release: 
+                rectory = app.root.get_screen('rectory')
+                rectory.text_validate(search_field, search_field.text, 10, rectory.main_tab, rectory.secondary_tab)
 
 <RTextField>:
 	multiline: False
-    hint_text: root.hint
+    line_anim: False
+    size_hint_y: None
+    size: (self.size[0], 50)
+    when: None # boolean: Excecute when field is...??
     on_text:
-        if 'name' in root.name:\
-        self.text, leng = self.text.title(), 30
-        elif root.name == 'middle_name' or root.name == 'last_name':\
-        self.text, leng = self.text.replace(' ', ''), 20
-        elif root.name == 'pass':\
-        leng = 16
-        elif root.name == 'email':\
-        leng = 40
+        leng = len(self.text)
+        
+        if 'name' in self.name:\
+        self.text = self.text.title()[:30]
+        
+        if self.name.replace('add_', '').replace('upd_', '').replace('del_', '') in ['middle_name', 'last_name']:\
+        self.text, leng = self.text.replace(' ', '')[:20]
+        elif self.name.replace('add_', '').replace('upd_', '').replace('del_', '') == 'pass':\
+        self.text, leng = self.text.replace(' ', '')[:16]
+        elif self.name.replace('add_', '').replace('upd_', '').replace('del_', '') == 'email':\
+        self.text, leng = self.text.replace(' ', '')[:40]
+        elif self.name.replace('add_', '').replace('upd_', '').replace('del_', '') == 'classroom':\
+        self.text = self.text.title()[:50]
+        elif self.name.replace('add_', '').replace('upd_', '').replace('del_', '') == 'banches':\
+        pass
         else:\
-        leng = 10
+        self.text, leng = self.text.replace(' ', '')[:10]
 
-        self.text = self.text[:leng]
+        if leng > len(self.text):\
+        app.showBanner("Longitud Excedida", "Este campo solo admite una longitud de {} caracteres".format(leng))
+
+        self.text = self.text.replace('  ', '')
+
     on_focus:
-        if self.focus == root.boolean:\
-        app.root.get_screen('rectory').text_validate(root.name, self, self.text, root.length, root.spaces)
+        self.text = self.text.strip()
+        if self.focus == self.when:\
+        app.root.get_screen('rectory').text_validate(self.name, self, self.text)
 
-<RLabel>:
-	text: root.text
-	markup: True
-	halign: root.halign
-	valign: root.valign
+        if self.focus == False and self.name == 'status' and self.text not in ['Alta', 'Baja Temporal', 'Baja Total']:\
+        self.text = ''
 
-<RButtons>:
-	MDFlatButton:
-		id: cancel
+<RCancelButton>:
+    theme_text_color: "Custom"
+    text_color: (81/255, 138/255, 114/255, 1)
+    halign: 'right'
+    valign: 'center'
+    size_hint_y: None
+    on_release: 
+        rectory = app.root.get_screen("rectory")
+        rectory.setInititalData(tab=rectory.main_tab, sub_tab=rectory.secondary_tab)
+        rectory.clearWidgets(tab=rectory.main_tab, sub_tab=rectory.secondary_tab)
+    pos_hint: {"center_y": .3, "right": 1}
 
-		text: 'Cancelar'
-		theme_text_color: "Custom"
-		text_color: (81/255, 138/255, 114/255, 1)
-		halign: 'right'
-		valign: 'center'
-        on_release: 
-            rectory = app.root.get_screen("rectory")
-            rectory.setInititalData(tab=rectory.main_tab, sub_tab=rectory.secondary_tab)
-            rectory.clearWidgets(tab=rectory.main_tab, sub_tab=rectory.secondary_tab)
-		pos_hint: {"center_y": .3, "right": 1}
-		
-	MDRaisedButton:
-		text: root.text
-        disabled: root.disable
-		theme_text_color: 'Custom'
-		text_color: (1, 1, 1, 1)
-		md_bg_color: (81/255, 138/255, 114/255, 1)
-		x: cancel.x - cancel.size[0] - 20
-		pos_hint: {"center_y": .3}
-        on_release: 
-            rectory = app.root.get_screen("rectory")
-            rectory.alterTable(rectory.main_tab, rectory.secondary_tab, rectory.tab[rectory.main_tab][rectory.secondary_tab])
+<RActionButton>:
+    theme_text_color: 'Custom'
+    text_color: (1, 1, 1, 1)
+    md_bg_color: (81/255, 138/255, 114/255, 1)
+    #pos_hint: {"center_y": .15}
+    size_hint_y: None
+    on_release: 
+        rectory = app.root.get_screen("rectory")
+        rectory.alterTable(rectory.main_tab, rectory.secondary_tab, rectory.tab[rectory.main_tab][rectory.secondary_tab])
 
 <ROptions>:
+    size_hint_y: None
+    size: (self.size[0], 50)
     on_focus:
         rectory = app.root.get_screen('rectory')
         if self.focus == True:\
         rectory.showOptions(forms=rectory.ids[rectory.main_tab].ids[rectory.secondary_tab], field=self, enrollment=rectory.ids.enrollment.text, employee=rectory.ids.employee.text)
 
+<RKardexButton>:
+    text: "Kardex"
+    color: (0, 0, 0, 1)#(237/255, 162/255, 22/255, 1)
+    background_color: (0, 0, 0, 0)
+    on_press:
+        self.background_color=(.7, .7, .7, 1)
+    on_release:
+        self.background_color=(0, 0, 0, 0)
+        rectory = app.root.get_screen('rectory')
+        rectory.showKardex(forms=rectory.tab[rectory.main_tab][rectory.secondary_tab], button=self, enrollment=rectory.ids.enrollment.text, employee=rectory.ids.employee.text)
 
+    canvas.before:
+        Color:
+            rgba: (237/255, 162/255, 22/255, 1)
+        Line:
+            rectangle: [self.pos[0]+1, self.pos[1], self.size[0]-2, self.size[1]]
+            width: 1.1
 
 
 

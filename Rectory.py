@@ -1,7 +1,8 @@
 from kivy.uix.screenmanager import Screen
 from kivy.lang import Builder
 from kivy.metrics import dp
-from kivy.properties import StringProperty, OptionProperty, NumericProperty, BooleanProperty
+from kivy.properties import StringProperty, OptionProperty, NumericProperty, BooleanProperty, ColorProperty
+from kivy.uix.button import Button
 
 from kivymd.app import MDApp
 from kivymd.uix.tab import MDTabsBase
@@ -9,6 +10,7 @@ from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.label import MDLabel
 from kivymd.uix.textfield import MDTextFieldRect
 from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.button import MDRaisedButton, MDFlatButton
 #from kivymd.uix.list import OneLineIconListItem
 
 import random
@@ -33,39 +35,43 @@ Builder.load_file('Student.kv')
 class Student(MDFloatLayout, MDTabsBase):
 	''''''
 
+Builder.load_file('Classroom.kv')
+class Classroom(MDFloatLayout, MDTabsBase):
+	''''''
+
 Builder.load_file('Schedule.kv')
 class Schedule(MDFloatLayout, MDTabsBase):
 	''''''
 
 Builder.load_file("Form.kv")
 class RTextField(MDTextFieldRect):
-	hint = StringProperty()
-	length = NumericProperty()
-	spaces = BooleanProperty()
-	boolean = BooleanProperty()
+	''''''
 
-class RLabel(MDLabel):
-	text = StringProperty()
-	name = StringProperty()
-	halign = OptionProperty("left", options=["left", "center", "right"])
-	valign = OptionProperty("left", options=["left", "center", "bottom", "top"])
+#class RLabel(MDLabel):
+#	text = StringProperty()
+#	name = StringProperty()
+#	halign = OptionProperty("left", options=["left", "center", "right"])
+#	valign = OptionProperty("left", options=["left", "center", "bottom", "top"])
+#
+#class RButtons(MDFloatLayout):
+#	text = StringProperty()
+#	disabled = BooleanProperty()
+#	name = StringProperty()
+#	disable = BooleanProperty()
+class RCancelButton(MDFlatButton):
+	''''''
 
-class RButtons(MDFloatLayout):
-	text = StringProperty()
-	disabled = BooleanProperty()
-	name = StringProperty()
-	disable = BooleanProperty()
+class RActionButton(MDRaisedButton):
+	''''''
 
 class RSearch(MDBoxLayout):
-	orientation = 'horizontal'
-	spacing = dp(5)
-	padding = dp(1), dp(0), dp(1), dp(0)
-	name = StringProperty()
-	text = StringProperty()
-	disabled = BooleanProperty()
+	''''''
 
 class ROptions(MDTextFieldRect):
-	hint = StringProperty()
+	''''''
+
+class RKardexButton(Button):
+	''''''
 
 class Rectory(Screen):
 	def __init__(self, **kwargs):
@@ -73,7 +79,7 @@ class Rectory(Screen):
 		global app
 		app = MDApp.get_running_app()
 
-		self.tab = {'rector':{}, 'teacher':{}, 'student':{}, 'schedule':{}}
+		self.tab = {'rector':{}, 'teacher':{}, 'student':{}, 'classroom':{}, 'schedule':{}}
 		self.setInititalData('rector', 'add')
 		self.setInititalData('rector', 'upd')
 		self.setInititalData('rector', 'del')
@@ -85,6 +91,10 @@ class Rectory(Screen):
 		self.setInititalData('student', 'add')
 		self.setInititalData('student', 'upd')
 		self.setInititalData('student', 'del')
+
+		self.setInititalData('classroom', 'add')
+		self.setInititalData('classroom', 'upd')
+		self.setInititalData('classroom', 'del')
 		
 		self.setInititalData('schedule', 'add')
 		self.setInititalData('schedule', 'upd')
@@ -92,11 +102,12 @@ class Rectory(Screen):
 		
 		global tclass
 		tclass = {
-			'rlabel': type(RLabel()),
+			#'rlabel': type(RLabel()),
 			'rfield': type(RTextField()),
-			'rbuttons': type(RButtons()),
+			#'rbuttons': type(RButtons()),
 			'rsearch': type(RSearch()),
-			'roptions': type(ROptions())
+			'roptions': type(ROptions()),
+			'rkbutton': type(RKardexButton())
 		}
 		
 		self.selected = {'upd': {'rector':{}, 'teacher':{}, 'student':{}, 'schedule':{}}}
@@ -133,6 +144,9 @@ class Rectory(Screen):
 			elif 'Estudiante' in tab_text:
 				tab = 'student'
 
+			elif 'Aula' in tab_text:
+				tab = 'classroom'
+
 			elif 'Horario' in tab_text:
 				tab = 'schedule'
 
@@ -162,7 +176,83 @@ class Rectory(Screen):
 				#break
 
 
-	def text_validate(self, name:str, field:object, text:str, length:int, spaces:bool)-> None:
+	def search(self, field:object, text:str, length:int, tab:str, sub_tab:str) -> None:
+		""" Get a textfield, its content and some parameters has to complete, so,
+			we validate it. If is correct, we refill the restant fields for the user
+			data.
+		Params:
+			field (object): Field
+			text (str): field text
+			length (int): maximum text length for field
+			tab (str): user (rector(employee) | teacher | student)
+			sub_tab (str): action (add | upd (update) | delete (del))
+		Returns: None
+		"""
+		if field.text != "":
+			if len(text) > length:
+				# excedent...
+				app.showBanner(
+					title="Longitud Excedida",
+					text='Este campo solo admite una longitud de {} caracteres'.format(length)
+				)
+			
+			else: # all right
+				data:tuple = app.execute("GetAccountData '{}', '{}'".format(tab, text))
+				if data:
+					i:int = len(data[0])-1
+					#data = data[0]
+					form:object = self.ids[tab].ids[sub_tab].ids.recycle_grid
+					print('def SEARCH')
+					print("DATA SELECT:", data)
+					facus = set()
+					careers = set()
+					for d in data:
+						for child in form.children:
+							print(child.name.upper(), '*******************')
+							if child.viewclass in [tclass['rsearch'], tclass['rfield'], tclass['roptions'], tclass['rbuttons']]:
+								if child.viewclass != type(RButtons()):
+									print("child:", child.name, "-", d[i])
+									child.text = str(d[i])
+		
+									if child.name == 'faculty':
+										facus.add(child.text)
+										child.text = ', '.join(facus)
+									elif child.name == 'career':
+										careers.add(child.text)
+										child.text = ', '.join(careers)
+									self.tab[tab][sub_tab][child.name] = child.text
+									
+									i -= 1
+
+								if sub_tab == "upd":
+									#print(child.name)
+									child.disabled = "enrollment" == child.name
+									if child.viewclass == tclass['rbuttons']:
+										child.disable = False
+
+								elif sub_tab == 'del':
+									child.disabled = child.viewclass != tclass['rbuttons'] # or class in ['rfield', 'rsearch']
+									child.disable = child.disabled
+								
+								else: # add
+									child.disabled = "enrollment" != child.name and child.name != "buttons"
+
+						if self.secondary_tab in ['upd', 'del']:
+							self.selected[sub_tab][tab] = self.tab[tab][sub_tab].copy()
+				else:
+					app.showBanner(
+						title='Matricula Invalida o Iconrrecta',
+						text="Lo sentimos, no se pudo encontrar ninguna cuenta con la matricula: {}.".format(text)
+					)
+					
+		else:
+			app.showBanner(
+				title='¡Campo Vacío!',
+				text='Debe de llenar el campo de busqueda.'
+			)
+
+
+	def text_validate(self, name:str, field:object, text:str)-> None:
 		"""	Get a field and its text to set self text (some
 			fields have different funtionalities)
 		Args:
@@ -172,144 +262,46 @@ class Rectory(Screen):
 							(text field, hint_text, etc.)
 			text (str): content field (text)
 			length (int): equivalent to max text length
-			spaces (bool): spaces allowed (Yes = True & No = False)
 		Returns: None
 		"""
-		if name == "": # search field (intentionality, we send an empty name)
-			if field.text != "":
-				# excedent...
-				if len(text) > length:
-					# excedent + multiline
-					if text.count("\n") > 0:
-						app.showBanner(
-							title="Longitud Excedida, Saltos de Linea y Números Añadidos",
-							text='Este campo solo admite una longitud de {} caracteres y no permite saltos de linea ni números.'.format(length)
-						)
-					# excedent
-					else:
-						app.showBanner(
-							title="Longitud Excedida",
-							text='Este campo solo admite una longitud de {} caracteres'.format(length)
-						)
-				elif text.count("n") > 0: # multiline
-					app.showBanner(
-						title='Saltos de linea',
-						text="Este campo no permite los saltos de linea."
-					)
-				else: # all right
-					data:tuple = app.execute("GetAccountData '{}', '{}'".format(self.main_tab, text))
-					if data:
-						i:int = len(data[0])-1
-						data = data[0]
-						form:object = self.ids[self.main_tab].ids[self.secondary_tab].ids.recycle_grid
-						for child in form.children:
-							if child.viewclass in [tclass['rsearch'], tclass['rfield'], tclass['rbuttons']]:
-								if child.viewclass != type(RButtons()):
-									#print("child:", child.name, "-", data[i])
-									child.text = str(data[i])
-									self.tab[self.main_tab][self.secondary_tab][child.name] = child.text
-									i -= 1
-
-								if self.secondary_tab == "upd":
-									child.disabled = "enrollment" == child.name
-									if child.viewclass == tclass['rbuttons']:
-										child.disable = False
-
-								elif self.secondary_tab == 'del':
-									child.disabled = child.viewclass != tclass['rbuttons'] # or class in ['rfield', 'rsearch']
-									child.disable = child.disabled
-								
-								else: # add
-									child.disabled = "enrollment" != child.name and child.name != "buttons"
-
-						if self.secondary_tab in ['upd', 'del']:
-							self.selected[self.secondary_tab][self.main_tab] = self.tab[self.main_tab][self.secondary_tab].copy()
-					else:
-						app.showBanner(
-							title='Matricula Invalida o Iconrrecta',
-							text="Lo sentimos, no se pudo encontrar ninguna cuenta con la matricula: {}.".format(text)
-						)
-						
-				text = text[:length]
-				text = text.replace("\n", "")
-
+		print(name)
+		print(field, field.hint_text)
+		print(text)
+		if field.input_filter == 'int':
+			pass
 		elif field.hint_text not in ['Matricula', 'Correo Universitario', 'Contraseña']:
 			if field.focus == False:
-				# excedent + ...
-				if len(text) > length:
-					# excedent + multiline + ...
-					if text.count('\n') > 0:
-						# excedent + multilines + numbers
-						if field.input_filter != 'int' and set(text)&set("0123456789"):
-							app.showBanner(
-								title="Longitud Excedida, Saltos de Linea y Números Añadidos",
-								text='Este campo solo admite una longitud de {} caracteres y no permite saltos de linea ni números.'.format(length)
-							)
-						# excent + multilines
-						else:
-							app.showBanner(
-								title="Longitud Excedida y Saltos de Linea",
-								text='Este campo solo admite una longitud de {} caracteres y no permite saltos de linea.'.format(length)
-							)
-					# excedent
-					else:
-						app.showBanner(
-							title="Longitud Excedida",
-							text='Este campo solo admite una longitud de {} caracteres'.format(length)
-						)
-
-				# multiline + ...
-				elif text.count('\n') > 0:
-					# multiline + numbers
-					if field.input_filter != 'int' and set(text)&set("0123456789"):
-						app.showBanner(
-							title="Saltos de Linea y Números Añadidos",
-							text='Este campo no permite saltos de linea ni números.'
-						)
-					# multiline
-					else:
-						app.showBanner(
-							title='Saltos de linea',
-							text="Este campo no permite los saltos de linea."
-						)
-				# numbers
-				elif field.input_filter != 'int' and set(text)&set("0123456789"):
+				if field.input_filter != 'int' and set(text)&set("0123456789"):
 					app.showBanner(
 						title="Números Añadidos",
 						text="Este campo no admite números."
 					)
-				text = text.replace('\n', '')
-				text = text[:length]
-				text = text.replace("0", "")
-				text = text.replace("1", "")
-				text = text.replace("2", "")
-				text = text.replace("3", "")
-				text = text.replace("4", "")
-				text = text.replace("5", "")
-				text = text.replace("6", "")
-				text = text.replace("7", "")
-				text = text.replace("8", "")
-				text = text.replace("9", "")
 				
-
-				text = text[:length]
-				if spaces == False:
-					text = text.replace(' ', '')
+				for num in '0123456789': text = text.replace(num, '')
 
 				field.text = text
+				print(self.main_tab, self.secondary_tab)
 				self.tab[self.main_tab][self.secondary_tab][name] = text
 				
 		else: # The field is the Enrollment, Email or Password
-			if self.secondary_tab == "add" or name == "email":
+			if self.secondary_tab == "add" or "email" in name:
 				app.openDialog(
 					title='Campo Bloqueado',
 					text='Este campo mostrara tu {} una vez guardados tus datos.'.format(field.hint_text)
 				)
-				
+
+			else:
+				self.tab[self.main_tab][self.secondary_tab][name] = text
+
 
 	def showOptions(self, forms:object, field:object, enrollment:str, employee:str):
-		app.root.get_screen('options').setData(forms, field, enrollment, employee)
-		app.root.current='options'
+		if app.root.get_screen('options').setData(forms, field, enrollment, employee):
+			app.root.current='options'
+
+
+	def showKardex(self, forms:dict, button:object, enrollment:str, employee:str):
+		if app.root.get_screen('options').setData(forms, button, enrollment, employee, self.secondary_tab):
+			app.root.current='options'
 
 
 	def setData(self, id_rector=int(), employee=str()) -> None:
@@ -320,358 +312,9 @@ class Rectory(Screen):
 			employee (str): employee name
 		Returns: None
 		"""
-		def setDataRectory(recycle:id, sub_tab:str)-> None:
-			"""	Get the recycle view where we will show the forms
-				for rectory employee.
-			Args:
-				recycle (object): This show an scroller box layout
-								  with the forms
-				sub_tab (str): It specifics the sub tab where we are
-							   adding the fields, buttons or labels.
-			Returns: None
-			"""
-
-			# Label sub title
-			recycle.data.append(
-				{
-					"viewclass": "RLabel",
-					"text": "[b][size=20][color=#05396E]Datos del Empleado[/color][/size][/b]",
-					"halign": "left",
-					"valign": "center"
-				}
-			)
-
-			# Label string
-			text = "[size=14][color=#EDA216]Las cuentas de rectoria tienen los "
-			text += "permisos para agregas mas cuentas de la misma, además de "
-			text += "cuentas para profesores, alumnos y agregar horarios.[/color][/size]"
-			recycle.data.append(
-				{
-					"viewclass": "RLabel",
-					"text": text,
-					"halign": "left",
-					"valign": "center"
-				}
-			)
-			disabled:bool = False
-			action = "Registrar"
-			if sub_tab in ['upd', 'del']:
-				# Enrollment
-				recycle.data.append({"viewclass": "RSearch", "name":"enrollment", "text": "", "disabled": False})
-				recycle.data.append({"viewclass": "RLabel", 'text': "", "size_hint_y": 1})
-				if sub_tab == "upd":
-					action = "Actualizar"
-				else:
-					action = "Eliminar"
-
-				disabled = True
-
-			# Name
-			recycle.data.append(
-				{
-					"viewclass": "RTextField",
-					"name": "name",
-					"text": "",
-					"hint": "Nombre",
-					"length": 30,
-					"spaces": True,
-					"boolean": False,
-					"multiline": False,
-					"disabled": disabled
-				}
-			)
-
-			# Middle Name
-			recycle.data.append(
-				{
-					"viewclass": "RTextField",
-					"name": "middle_name",
-					"text": "",
-					"hint": "Primer Apellido",
-					"length": 20,
-					"spaces": False,
-					"boolean": False,
-					"multiline": False,
-					"disabled": disabled
-				}
-			)
-
-			# Last Name
-			recycle.data.append(
-				{
-					"viewclass": "RTextField",
-					"name": "last_name",
-					"text": "",
-					"hint": "Segundo Apellido",
-					"length": 20,
-					"spaces": False,
-					"boolean": False,
-					"multiline": False,
-					"disabled": disabled
-				}
-			)
-
-			if sub_tab == 'add':
-				# Enrollment
-				recycle.data.append(
-					{
-						"viewclass": "RTextField",
-						"name": "enrollment",
-						"text": "",
-						"boolean": True,
-						"hint": "Matricula"
-					}
-				)
-
-			# Email
-			recycle.data.append(
-				{
-					"viewclass": "RTextField",
-					"name": "email",
-					"text": "",
-					"hint": "Correo Universitario",
-					"boolean": True,
-					"disabled": disabled
-				}
-			)
-
-			# Password
-			recycle.data.append(
-				{
-					"viewclass": "RTextField",
-					"name": "pass",
-					"text": "",
-					"hint": "Contraseña",
-					"boolean": sub_tab == "add",
-					"disabled": disabled
-				}
-			)
-
-			# Buttons
-			recycle.data.append(
-				{
-					"viewclass": "RButtons",
-					"name": "buttons",
-					"text": action,
-					"disabled": disabled,
-					"disable": disabled
-				}
-			)
-			
-		def setDataTeacher(recycle:id, sub_tab:str)-> None:
-			"""	Get the recycle view where we will show the forms
-				for teacher.
-			Args:
-				recycle (object): This show an scroller box layout
-								  with the forms
-				sub_tab (str): It specifics the sub tab where we are
-							   adding the fields, buttons or labels.
-			Returns: None
-			"""
-
-			# Label sub title
-			recycle.data.append(
-				{
-					"viewclass": "RLabel",
-					"text": "[b][size=20][color=#05396E]Datos del Profesor[/color][/size][/b]",
-					"halign": "left",
-					"valign": "center"
-				}
-			)
-
-			# Label string
-			text = "[size=14][color=#EDA216]Los profesores en conjunto con "
-			text += "nuestros empleados de rectoria se póndrán de acuerdo para "
-			text += "definir los horarios, considerando que muchos profesores "
-			text += "cuentan con dos empleos.[/color][/size]"
-			recycle.data.append(
-				{
-					"viewclass": "RLabel",
-					"text": text,
-					"halign": "left",
-					"valign": "center"
-				}
-			)
-
-			action = "Registrar"
-			if sub_tab in ['upd', 'del']:
-				# Enrollment
-				recycle.data.append({"viewclass": "RSearch", "name":"enrollment", "text": "", "disabled": False})
-				recycle.data.append({"viewclass": "RLabel", 'text': "", "size_hint_y": 1})
-				if sub_tab == "upd":
-					action = "Actualizar"
-				else:
-					action = "Eliminar"
-
-				disabled = True
-
-			# Name
-			recycle.data.append(
-				{
-					"viewclass": "RTextField",
-					"name": "name",
-					"text": "",
-					"hint": "Nombre",
-					"length": 30,
-					"spaces": True,
-					"boolean": False,
-					"multiline": False
-				}
-			)
-
-			# Middle Name
-			recycle.data.append(
-				{
-					"viewclass": "RTextField",
-					"name": "middle_name",
-					"text": "",
-					"hint": "Primer Apellido",
-					"length": 20,
-					"spaces": False,
-					"multiline": False
-				}
-			)
-
-			# Last Name
-			recycle.data.append(
-				{
-					"viewclass": "RTextField",
-					"name": "last_name",
-					"text": "",
-					"hint": "Segundo Apellido",
-					"length": 20,
-					"spaces": False,
-					"multiline": False
-				}
-			)
-
-			# Faculty
-			recycle.data.append(
-				{
-					"viewclass": "ROptions",
-					"name": "faculty",
-					"hint_text": "Facultad(es)"
-				}
-			)
-
-			# Career
-			recycle.data.append(
-				{
-					"viewclass": "ROptions",
-					"name": "career",
-					"hint_text": "Carrera(s)"
-				}
-			)
-
-			if sub_tab == 'add':
-				# Enrollment
-				recycle.data.append(
-					{
-						"viewclass": "RTextField",
-						"name": "enrollment",
-						"hint": "Matricula",
-						"boolean": True,
-						"text": ""
-					}
-				)
-
-			# Email
-			recycle.data.append(
-				{
-					"viewclass": "RTextField",
-					"name": "email",
-					"hint": "Correo Universitario",
-					"boolean": True,
-					"text": ""
-				}
-			)
-
-			# Password
-			recycle.data.append(
-				{
-					"viewclass": "RTextField",
-					"name": "pass",
-					"text": "",
-					"boolean": sub_tab == 'add',
-					"hint": "Contraseña"
-				}
-			)
-
-			# Buttons
-			recycle.data.append(
-				{
-					"viewclass": "RButtons",
-					"name": "buttons",
-					"text": "Registrar",
-					"disabled": False,
-					"disable": False
-				}
-			)
-
-			# Empty label
-			recycle.data.append(
-				{
-					"viewclass": "RLabel",
-					"text": ""
-				}
-			)
-
-		def setDataStudent(recycle:id, sub_tab:str)-> None:
-			"""	Get the recycle view where we will show the forms
-				for student.
-			Args:
-				recycle (object): This show an scroller box layout
-								  with the forms
-				sub_tab (str): It specifics the sub tab where we are
-							   adding the fields, buttons or labels.
-			Returns: None
-			"""
-			pass
-
-		def setDataSchedule(recycle:id, sub_tab:str)-> None:
-			"""	Get the recycle view where we will show the forms
-				for schedule.
-			Args:
-				recycle (object): This show an scroller box layout
-								  with the forms
-				sub_tab (str): It specifics the sub tab where we are
-							   adding the fields, buttons or labels.
-			Returns: None
-			"""
-			pass
-
-		if id_rector != int() and employee != str():
-			self.ids["enrollment"].text = "[color=#ffffff][b]Matricula:[/b] {}[/color]".format(id_rector)
-			self.ids["employee"].text = "[color=#ffffff][b]Empleado:[/b] {}[/color]".format(employee)
-
-		for tab in self.tab.keys():
-			# tab['rector']
-			# tab['teacher']
-			# tab['student']
-			# tab['schedule']
-			for sub_tab in ['add', 'upd', 'del']:
-				recycle=self.ids[tab].ids[sub_tab].ids.recycle
-				recycle.data = []
-				if tab == 'rector':
-					setDataRectory(
-						recycle=recycle,
-						sub_tab=sub_tab
-					)
-				elif tab == 'teacher':
-					setDataTeacher(
-						recycle=recycle,
-						sub_tab=sub_tab
-					)
-				elif tab == 'student':
-					setDataStudent(
-						recycle=recycle,
-						sub_tab=sub_tab
-					)
-				else: # schedule
-					setDataSchedule(
-						recycle=recycle,
-						sub_tab=sub_tab
-					)
+		
+		self.ids["enrollment"].text = "[color=#ffffff][b]Matricula:[/b] {}[/color]".format(id_rector)
+		self.ids["employee"].text = "[color=#ffffff][b]Empleado:[/b] {}[/color]".format(employee)
 				
 
 	def setInititalData(self, tab:str, sub_tab:str)-> None:
@@ -709,7 +352,7 @@ class Rectory(Screen):
 					'name': '', # str
 					'middle_name': '', # str
 					'last_name': '', # str
-					'faculty': {}, # facutlty or faculties + career or careers (strings)
+					'faculty': [], # facutlty or faculties + career or careers (strings)
 					'career': [], # career or careers (strings)
 					'enrollment': '', # int
 					'email': '', # str
@@ -720,7 +363,7 @@ class Rectory(Screen):
 					'name': '', # str
 					'middle_name': '', # str
 					'last_name': '', # str
-					'faculty': {}, # facutlty or faculties + career or careers (strings)
+					'faculty': [], # facutlty or faculties + career or careers (strings)
 					'career': [], # career or careers (strings)
 					'email': '', # str
 					'pass': '', # str			
@@ -739,7 +382,7 @@ class Rectory(Screen):
 					'pass': '', # str
 					'faculty': '', # str
 					'career': '', # str
-					'try': 1, # int
+					'status': '', # int
 					'kardex': {}, # dict with cursed subjects in the before career
 				},
 				'upd':{
@@ -751,7 +394,7 @@ class Rectory(Screen):
 					'pass': '', # str
 					'faculty': '', # str
 					'career': '', # str
-					'try': 1, # int
+					'status': '', # int
 					'kardex': {}, # dict with cursed subjects in the before career
 				},
 				'del':{
@@ -761,6 +404,17 @@ class Rectory(Screen):
 			'schedule': {
 				'add': {
 					
+				},
+				'upd':{
+					
+				},
+				'del':{
+
+				}
+			},
+			'classroom': {
+				'add': {
+					'classroom': ''
 				},
 				'upd':{
 					
@@ -783,6 +437,8 @@ class Rectory(Screen):
 			data (dict): Data to save
 		Returns: None
 		"""
+		print(data)
+		'''
 		def isCorrect(data:dict, sub_tab:str) -> bool:
 			""" Get the data of an employee, teacher, student or a new schedule
 				and it validates all the fields are filled.
@@ -792,10 +448,18 @@ class Rectory(Screen):
 				bool: True = is correct & False = is not correct. 
 			"""
 			correct = True
+			print('isCorrect')
+			print(data)
 			for key in data:
-				if not data[key] and sub_tab == 'upd':
-					correct = False
-					break
+				if not data[key]:
+					if sub_tab == 'add' and key == 'email' or key == 'enrollment' or key == 'pass':
+						pass
+					else:
+						correct = False
+						print('{}: {}'.format(key, data[key]))
+						print('/isCorrect')
+						break
+			print('/isCorrect')
 
 			return correct
 
@@ -818,11 +482,21 @@ class Rectory(Screen):
 			else:
 				typ = 3
 
-			if app.execute("GetAccount '{}', '{}', '{}', '{}', '{}'".format(typ, data["enrollment"], data["middle_name"], data["last_name"], data["name"])):
-				return True
+			print("userExist")
+			print(data)
+			if sub_tab == 'add':
+				if account_exist:
+				print(True)
+				print('/userExist')
+				return True # User exist
 
 			else:
-				return False
+				print(False)
+				print('/userExist')
+				return False # Not exist
+			else:
+				return True
+
 
 		def isModified(d1:dict):
 			"""	Get the selected data before modifying and the 'modified',
@@ -834,13 +508,18 @@ class Rectory(Screen):
 									(True = name is modified & False = is not modified).
 			"""
 			modified = False
+			print('isModified')
+			print('d1', d1)
 			if self.secondary_tab == 'upd':
 				d2 = self.selected[self.secondary_tab][self.main_tab]
+				print('d2', d2)
 				if d1['name'] != d2['name'] or d1['middle_name'] != d2['middle_name'] or d1['last_name'] != d2['last_name']:
 					modified = True
 
+				print('/isModified')
 				return d1 != d2, modified
 			else:
+				print('/isModified')
 				return None, None
 		
 
@@ -874,6 +553,7 @@ class Rectory(Screen):
 				
 				return email
 
+			#print(name, middle_name, last_name)
 			shortened = last_name[0] + last_name[len(last_name)-1]
 			email = '{}.{}{}@uanl.edu.mx'.format(name, middle_name, shortened)
 			email = email.lower()
@@ -931,14 +611,20 @@ class Rectory(Screen):
 					else:
 						n = 3
 
+					print(data)
+					#raise Exception('Siuu')
 					if sub_tab in ['add', 'upd'] and tab in ['rector', 'teacher', 'student']:
 						data["email"] = getEmail(n, data["name"], data["middle_name"], data["last_name"])
 						if sub_tab == 'add':
 							data["pass"] = getPassword()
+							print(data)
 
 						else: # sub_tab == 'upd'
 							# user name exist?
-							if app.execute("GetAccount '{}', '', '{}', '{}', '{}'".format(n, data["middle_name"], data["last_name"], data["name"])):
+							got = app.execute("GetAccount '{}', '{}', '{}', '{}', '{}'".format(n, data["enrollment"], data["middle_name"], data["last_name"], data["name"]))
+							print('USER FOUND')
+							print(got)
+							if got:
 								tab = ''
 
 					if tab == "rector":
@@ -969,46 +655,51 @@ class Rectory(Screen):
 								)
 								text = 'El Empleado se a Guardado Correctamente.'
 							else:
-								text = 'Los Datos del Empleado se Actualizaron con éxito.'
+								text = 'Los Datos del Empleado se Actualizaron Correctamente.'
 							fillEmptyFields(tab, sub_tab, data)
 						
 						else: # del
-							text = 'Los Datos del Empleado han sido Eliminados Eorrectamente.'
+							text = 'Los Datos del Empleado han sido Eliminados Correctamente.'
 						
 					elif tab == "teacher":
-						for f in data["faculty"]:
-							# f = faculty name
-							# data["faculty"][f] = list of career(s)
-							for c in data["faculty"][f]:
-								app.execute(
-									"AlterTeacherTable '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}'".format(
-										data["enrollment"],
-										data["name"], 
-										data["middle_name"],
-										data["last_name"],
-										f,
-										c,
-										data["email"],
-										data["pass"], 
-										sub_tab
-									)
+						for c in data["career"].split(', '):
+							app.execute(
+								"AlterTeacherTable '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}'".format(
+									data["enrollment"],
+									data["name"], 
+									data["middle_name"],
+									data["last_name"],
+									c.split(': ')[0], # id career
+									data["email"],
+									data["pass"], 
+									sub_tab
 								)
+							)
 
 						if sub_tab == 'add':
-							data["enrollment"] = app.execute(
-								"GetIDTeacher '{}', '{}', '{}', '{}', '{}'".format(
+							app.execute("UpdateAddedTeacher '{}', '{}', '{}', '{}', '{}'".format(
+								data["middle_name"],
+								data["last_name"],
+								data["name"],
+								data["email"],
+								data["pass"]
+							))
+
+							data["enrollment"] = str(
+								app.execute("GetUpdatedAddedTeacher '{}', '{}', '{}', '{}', '{}'".format(
 									data["middle_name"],
 									data["last_name"],
 									data["name"],
 									data["email"],
 									data["pass"]
-								)
-							)[0][0]
+								))[0][0]
+							)
+							print(data)
 
 							fillEmptyFields(tab, sub_tab, data)
 							text = 'El Profesor se a Guardado Correctamente.'
 						elif sub_tab == 'upd':
-							text = 'Los Datos del Profesor se Actualizaron con Éxito.'
+							text = 'Los Datos del Profesor se Actualizaron Correctamente.'
 						else: # del
 							text = 'El datos del Profesor han sido Eliminados Correctamente.'
 
@@ -1038,7 +729,7 @@ class Rectory(Screen):
 
 					else:
 						app.showBanner(
-							title='¡Excelente!',
+							title='¡Proceso Realizado con Éxito!',
 							text=text
 						)
 
@@ -1064,6 +755,7 @@ class Rectory(Screen):
 				title="Aún hay campos por llenar",
 				text="Por favor, llene todos los campos."
 			)
+	'''
 
 
 	def setInitialStateForm(self, tab:str, sub_tab:str) -> None:
@@ -1092,7 +784,7 @@ class Rectory(Screen):
 		for child in form.children:
 			viewclass = child.viewclass
 
-			if viewclass == tclass['rsearch'] or viewclass == tclass['rfield']:
+			if viewclass in [tclass['rsearch'], tclass['rfield'], tclass['roptions']]:
 				#print('viewclass::', viewclass, 'child name', child.name, 'child text::', child.text)
 				child.text = ''
 

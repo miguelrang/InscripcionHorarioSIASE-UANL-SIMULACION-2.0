@@ -39,6 +39,7 @@ class main(MDApp):
 			self.icon = "images/icon.png"
 
 		self.title = "Servicios en Linea"
+		#self.theme_cls.theme_style = ''
 		Window.size = (700, 450)
 		
 		wm = WindowManager()
@@ -66,7 +67,7 @@ class main(MDApp):
 			text=text,
 			buttons=[
 				MDRectangleFlatButton(
-					text='Aceptar',
+					text='Aceptar',	
 					on_press=closeDialog
 				)
 			]
