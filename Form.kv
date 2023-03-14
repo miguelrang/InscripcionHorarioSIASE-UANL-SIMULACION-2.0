@@ -33,11 +33,13 @@
     size: (self.size[0], 50)
     when: None # boolean: Excecute when field is...??
     on_text:
+        print(self.name, '1')
         leng = len(self.text)
         
         if 'name' in self.name:\
         self.text = self.text.title()[:30]
         
+        print(self.name, '2')
         if self.name.replace('add_', '').replace('upd_', '').replace('del_', '') in ['middle_name', 'last_name']:\
         self.text, leng = self.text.replace(' ', '')[:20]
         elif self.name.replace('add_', '').replace('upd_', '').replace('del_', '') == 'pass':\
@@ -46,16 +48,19 @@
         self.text, leng = self.text.replace(' ', '')[:40]
         elif self.name.replace('add_', '').replace('upd_', '').replace('del_', '') == 'classroom':\
         self.text = self.text.title()[:50]
-        elif self.name.replace('add_', '').replace('upd_', '').replace('del_', '') == 'banches':\
+        elif self.name.replace('add_', '').replace('upd_', '').replace('del_', '') in ['id_classroom', 'banches', 'search']:\
         pass
         else:\
         self.text, leng = self.text.replace(' ', '')[:10]
-
+        
+        print(self.name, '2')
         if leng > len(self.text):\
         app.showBanner("Longitud Excedida", "Este campo solo admite una longitud de {} caracteres".format(leng))
-
+        
+        print(self.name, '3')
         self.text = self.text.replace('  ', '')
-
+        
+        print(self.name, '4')
     on_focus:
         self.text = self.text.strip()
         if self.focus == self.when:\

@@ -3,6 +3,7 @@ from kivy.lang import Builder
 from kivy.metrics import dp
 from kivy.properties import StringProperty, OptionProperty, NumericProperty, BooleanProperty, ColorProperty
 from kivy.uix.button import Button
+from kivy.clock import mainthread
 
 from kivymd.app import MDApp
 from kivymd.uix.tab import MDTabsBase
@@ -11,8 +12,10 @@ from kivymd.uix.label import MDLabel
 from kivymd.uix.textfield import MDTextFieldRect
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRaisedButton, MDFlatButton
+from kivymd.uix.menu import MDDropdownMenu
 #from kivymd.uix.list import OneLineIconListItem
 
+import threading
 import random
 import re
 
@@ -116,6 +119,9 @@ class Rectory(Screen):
 		self.field = None
 		self.main_tab = 'rector'
 		self.secondary_tab = 'add'
+
+		self.menu = MDDropdownMenu()
+		self.menu_items = []
 
 
 	def setTab(self, main_tab:bool, instance_tabs:object, instance_tab:object, instance_tab_label:object, tab_text:str)-> None:
@@ -292,6 +298,107 @@ class Rectory(Screen):
 
 			else:
 				self.tab[self.main_tab][self.secondary_tab][name] = text
+
+	@mainthread
+	def setClassrooms(self, seeker:object, options:list, text:str) -> None:
+		"""	We get from database all classrooms and we save it in
+			a list of dictionaries.
+		Args:
+
+			options (list): A list of tuples (each tuple contains 
+							classroom data).
+			text (str): Text for classroom option
+		Returns: None
+		"""
+		def completeData(selected:str) -> None:
+			seeker.text = selected
+			#self.menu.dismiss()
+
+		#options = app.execute("GetClassrooms")
+		if options:
+			self.menu_items = [{"text": data[0], "viewclass": "OneLineListItem", "on_press": lambda x=data[0]: completeData(x)} for data in options]
+		else:
+			app.showDialog(
+				title='¡Sin {} para Mostrar!'.format(text),
+				text='Actualmente no hay {} en la base de datos.'.format(text)
+			)
+
+
+	@mainthread
+	def showClassrooms(self, caller:object, searching:str, id_classroom=None, classroom=None, banches=None, action=None) -> None:
+		"""	We search coincidences from 'searching' variable and
+			we shows them on screen.
+		Args:
+			caller (object): Widget for MDDropdownMenu widget.
+			searching (str): Classroom to search or similars.
+			id_classroom (object): Field where we shows the classroom id.
+			classroom (object): Field where we show the classroom name/number.
+			banches (object): Field where we show the enable banches in classroom.
+			action (object): Action to do (Update / Delete).
+		Returns: None
+		"""
+		def addFieldsContent(data:str) -> None:
+			""" We show the classroom info in the fields.
+			Args:
+				data (str): Classroom we wrote in the seeker
+			Returns: None
+			"""
+			data = app.execute("getClassroom '{}', '{}'".format(data.split(': ')[0], data.split(': ')[1]))[0]
+			id_classroom.text = str(data[0])
+			classroom.text = str(data[1])
+			banches.text = str(data[2])
+			
+			if 'upd' == self.secondary_tab:
+				classroom.disabled = False
+				banches.disabled = False
+			action.disabled = False
+
+		def clearFieldsContent() -> None:
+			""" We clear the content fields.
+			Args: None
+			Returns: None
+			"""
+			id_classroom.text = ''
+			classroom.text = ''
+			banches.text = ''
+			
+			if 'upd' == self.secondary_tab:
+				classroom.disabled = True
+				banches.disabled = True
+			action.disabled = True
+
+
+		if caller.text != '':
+			coincidence = re.compile(r'(.?)*{}(.?)*'.format(searching))
+
+			self.menu.caller = caller
+			try:
+				self.menu.dismiss()
+			except:
+				pass
+			self.menu.items = []
+			for option in self.menu_items:
+				if coincidence.fullmatch(option['text']):
+					self.menu.items.append(option)
+					
+					addFieldsContent(searching) if option['text'] == searching else clearFieldsContent()
+						
+			if self.menu.items == []:
+				app.showBanner(
+					title='¡Sin Coincidencias!',
+					text='No pudimos encontrar ninguna coincidencia: {}'.format(searching)
+				)
+
+			elif len(self.menu.items) == 1 and self.menu.items[0]['text'] == searching:
+				try:
+					self.menu.dismiss()
+				except:
+					pass
+			else:
+				self.menu.width_mult=4
+				self.menu.open()
+		else:
+			self.menu.dismiss()
 
 
 	def showOptions(self, forms:object, field:object, enrollment:str, employee:str):

@@ -91,7 +91,7 @@ class main(MDApp):
 			server = ('Driver={ODBC Driver 17 for SQL Server};'
 				'Server=LAPTOP-CF0NC87S;'
 				'Database=UANL;'
-				'Trusted_Connection=yes'
+				'Trusted_Connection=yes;'
 			)
 
 			return server
@@ -101,9 +101,8 @@ class main(MDApp):
 			#print('EXECUTE', procedure + ';')
 			sql.execute('EXECUTE {};'.format(procedure))
 
-			if 'Get' in procedure:
-				return sql.fetchall()
-		
+			return sql.fetchall()
+
 
 if __name__ == "__main__":
 	#sql = sqlCONNECTION()
