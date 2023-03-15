@@ -15,45 +15,17 @@
                 name: 'add'
 
                 title: 'Agregar'
-                
-                MDBoxLayout:
-                    orientation: 'vertical'
-                    size_hint: (.35, .95)
-                    pos_hint: {'center_x': .5, 'center_y': .5}
-                    padding: dp(1), dp(5), dp(1), dp(5)
-                    
-                    canvas.before:
-                        Color:
-                            rgba: (1, 1, 1, 1)
-                        
-                        RoundedRectangle:
-                            size: self.size
-                            pos: self.pos
-                        
-                        Color:
-                            rgba: (.5, .5, .5, 1)
-                        
-                        Line:
-                            rounded_rectangle: [self.pos[0], self.pos[1], self.size[0], self.size[1], 10, 10, 10, 10]
-                            width: 1.5
-                        
-                        Color:
-                            rgba: (237/255, 162/255, 22/255, .5)
-                        
-                        Line:
-                            rounded_rectangle: [self.pos[0], self.pos[1], self.size[0], self.size[1], 10, 10, 10, 10]
 
+                FBoxLayout:
                     ScrollView:
                         scroll_type: ["bars"]
                         bar_color: (.9, .9, .9, .9)
                         bar_width: dp(20)
-                        #padding: dp(5), dp(0) ,dp(0), dp(5)
                         do_scroll_y: True
                         
                         MDBoxLayout:
                             orientation: 'vertical'
                             adaptive_height: True
-                            padding: dp(10), dp(0), dp(10), dp(0)
                             spacing: dp(5)
 
                             MDLabel:
@@ -65,143 +37,113 @@
                                 size: (self.size[0], 50)
                             
                             MDLabel:
-                                text: '[size=14][color=#EDA216]Los Alumnos deberán realizar sus horarios en el día asignado por la facultad.[/color][/size]'
+                                text: '[size=15][color=#EDA216]Las cuentas de rectoria tienen los permisos para agregas mas cuentas de la misma, además de cuentas para profesores, alumnos y agregar horarios.[/color][/size]'
                                 markup: True
                                 halign: 'justify' #['left', 'center', 'right', 'justify', 'auto']
                                 valign: 'center'
                                 size_hint_y: None
                                 size: (self.size[0], 60)
 
-                            RTextField:
+                            FTextField:
                                 id: add_middle_name
                                 name: 'add_middle_name'
 
                                 hint_text: "Primer Apellido"
-                                when: False
+                                active: True
+                                leng: 30
                             
-                            RTextField:
+                            FTextField:
                                 id: add_last_name
                                 name: 'add_last_name'
 
                                 hint_text: 'Segundo Apellido'
-                                when: False
+                                active: True
+                                leng: 30
                             
-                            RTextField:
+                            FTextField:
                                 id: add_name
                                 name: 'add_name'
 
                                 hint_text: 'Nombre'
-                                when: False
+                                active: True
+                                leng: 50
                             
-                            ROptions:
-                                id: add_faculty
-                                name: 'add_faculty'
+                            FSearcher:
+                                id: add_faculties
+                                name: 'add_faculties'
 
                                 hint_text: 'Facultades'
+                                leng: 150
                             
-                            ROptions:
-                                id: add_career
-                                name: 'add_career'
+                            FSearcher:
+                                id: add_careers
+                                name: 'add_careers'
 
                                 hint_text: 'Carreras'
+                                leng: 240
                             
-                            RKardexButton:
-                                id: add_kardex
-                                name: 'add_kardex'
-                                
-                                size_hint_y: None
-                                size: (self.size[0], 50)
-
-                            RTextField:
+                            FTextField:
                                 id: add_enrollment
                                 name: 'add_enrollment'
 
                                 hint_text: 'Matricula'
-                                when: True
+                                active: False
+                                leng: 10
                             
-                            RTextField:
+                            FKardex:
+                                id: add_kardex
+                                name: 'add_kardex'
+                            
+                            FTextField:
                                 id: add_email
                                 name: 'add_email'
 
                                 hint_text: 'Correo Universitario'
-                                when: True
+                                active: False
+                                leng: 40
                             
-                            RTextField:
+                            FTextField:
                                 id: add_pass
                                 name: 'add_pass'
 
                                 hint_text: 'Contraseña'
-                                when: True
+                                active: False
+                                leng: 16
 
                             MDFloatLayout:
                                 cols: 1
                                 size_hint_y: None
-                                size: (1, 40)
-
-                                RCancelButton:
+                                size: (self.size[0], 50)
+                                FCancelButton:
                                     id: add_cancel
                                     name: 'add_cancel'
-                                    
+
                                     text: 'Limpiar'
 
-                                RActionButton:
+                                FActionButton:
                                     id: add_save
                                     name: 'add_save'
-
-                                    text: 'Guardar Estudiante'
-                                    x: add_cancel.x - self.size[0] - 10
-                                    y: add_cancel.y
+                                    text: 'Guardar Empleado'
+                                    x: add_cancel.x - 5 - self.size[0]
                                 
-                            MDLabel:
-                                size_hint_y: None
-                                size: (self.size[0], 20)
-                          
             Update:
                 id: upd
                 name: 'upd'
 
                 title: 'Actualizar'
 
-                MDBoxLayout:
-                    orientation: 'vertical'
-                    size_hint: (.35, .95)
-                    pos_hint: {'center_x': .5, 'center_y': .5}
-                    padding: dp(1), dp(5), dp(1), dp(5)
-                    
-                    canvas.before:
-                        Color:
-                            rgba: (1, 1, 1, 1)
-                        
-                        RoundedRectangle:
-                            size: self.size
-                            pos: self.pos
-                        
-                        Color:
-                            rgba: (.5, .5, .5, 1)
-                        
-                        Line:
-                            rounded_rectangle: [self.pos[0], self.pos[1], self.size[0], self.size[1], 10, 10, 10, 10]
-                            width: 1.5
-                        
-                        Color:
-                            rgba: (237/255, 162/255, 22/255, .5)
-                        
-                        Line:
-                            rounded_rectangle: [self.pos[0], self.pos[1], self.size[0], self.size[1], 10, 10, 10, 10]
-
+                FBoxLayout:
                     ScrollView:
                         scroll_type: ["bars"]
                         bar_color: (.9, .9, .9, .9)
                         bar_width: dp(20)
-                        #padding: dp(5), dp(0) ,dp(0), dp(5)
                         do_scroll_y: True
                         
                         MDBoxLayout:
                             orientation: 'vertical'
                             adaptive_height: True
-                            padding: dp(10), dp(0), dp(10), dp(0)
                             spacing: dp(5)
-
+    
                             MDLabel:
                                 text: '[b][size=20][color=#05396E]Datos del Estudiante[/color][/size][/b]'
                                 markup: True
@@ -211,155 +153,119 @@
                                 size: (self.size[0], 50)
                             
                             MDLabel:
-                                text: '[size=14][color=#EDA216]Los Alumnos deberán realizar sus horarios en el día asignado por la facultad.[/color][/size]'
+                                text: '[size=15][color=#EDA216]Las cuentas de rectoria tienen los permisos para agregas mas cuentas de la misma, además de cuentas para profesores, alumnos y agregar horarios.[/color][/size]'
                                 markup: True
                                 halign: 'justify' #['left', 'center', 'right', 'justify', 'auto']
-                                valign: 'top'
+                                valign: 'center'
                                 size_hint_y: None
                                 size: (self.size[0], 60)
-                            
-                            MDLabel:
-                                text: ''
-                                size_hint_y: None
-                                size: (self.size[0], 30)
 
-                            RSearch:
+                            FFinder:
                                 id: upd_enrollment
                                 name: 'upd_enrollment'
 
-                                #size: (add_enrollment.size[0], add_enrollment.size[1]+50)
-
-                            RTextField:
+                                hint_text: 'Matricula'
+                                
+                            FTextField:
                                 id: upd_middle_name
                                 name: 'upd_middle_name'
 
                                 hint_text: "Primer Apellido"
                                 disabled: True
-                                when: False
+                                active: True
+                                leng: 30
                             
-                            RTextField:
+                            FTextField:
                                 id: upd_last_name
                                 name: 'upd_last_name'
 
                                 hint_text: 'Segundo Apellido'
                                 disabled: True
-                                when: False
+                                active: True
+                                leng: 30
                             
-                            RTextField:
+                            FTextField:
                                 id: upd_name
                                 name: 'upd_name'
 
                                 hint_text: 'Nombre'
                                 disabled: True
-                                when: False
+                                active: True
+                                leng: 50
                             
-                            ROptions:
-                                id: upd_faculty
-                                name: 'add_faculty'
+                            FSearcher:
+                                id: upd_faculties
+                                name: 'upd_faculties'
 
                                 hint_text: 'Facultades'
                                 disabled: True
+                                leng: 150
                             
-                            ROptions:
-                                id: upd_career
-                                name: 'add_career'
+                            FSearcher:
+                                id: upd_careers
+                                name: 'upd_careers'
 
                                 hint_text: 'Carreras'
                                 disabled: True
-                            
-                            RKardexButton:
+                                leng: 240
+
+                            FKardex:
                                 id: upd_kardex
                                 name: 'upd_kardex'
-                                
-                                disabled: True
-                                size_hint_y: None
-                                size: (self.size[0], 50)
-                            
-                            RTextField:
+
+                            FTextField:
                                 id: upd_email
                                 name: 'upd_email'
 
                                 hint_text: 'Correo Universitario'
                                 disabled: True
-                                when: True
+                                active: False
+                                leng: 40
                             
-                            RTextField:
+                            FTextField:
                                 id: upd_pass
                                 name: 'upd_pass'
 
                                 hint_text: 'Contraseña'
                                 disabled: True
-                                when: True
+                                active: False
+                                leng: 16
 
                             MDFloatLayout:
                                 cols: 1
                                 size_hint_y: None
-                                size: (1, 40)
-
-                                RCancelButton:
+                                size: (self.size[0], 50)
+                                FCancelButton:
                                     id: upd_cancel
                                     name: 'upd_cancel'
-                                    
-                                    text: 'Cancelar'
+
+                                    text: 'Limpiar'
                                     disabled: True
 
-                                RActionButton:
+                                FActionButton:
                                     id: upd_save
                                     name: 'upd_save'
 
                                     text: 'Guardar Modificaciones'
                                     disabled: True
-                                    x: upd_cancel.x - self.size[0] - 10
-                                    y: upd_cancel.y
-                                
-                            MDLabel:
-                                size_hint_y: None
-                                size: (self.size[0], 20)
-            
+                                    x: upd_cancel.x - 5 - self.size[0]
+                
             Delete:
                 id: del
                 name: 'del'
 
                 title: 'Eliminar'
 
-                MDBoxLayout:
-                    orientation: 'vertical'
-                    size_hint: (.35, .95)
-                    pos_hint: {'center_x': .5, 'center_y': .5}
-                    padding: dp(1), dp(5), dp(1), dp(5)
-                    
-                    canvas.before:
-                        Color:
-                            rgba: (1, 1, 1, 1)
-                        
-                        RoundedRectangle:
-                            size: self.size
-                            pos: self.pos
-                        
-                        Color:
-                            rgba: (.5, .5, .5, 1)
-                        
-                        Line:
-                            rounded_rectangle: [self.pos[0], self.pos[1], self.size[0], self.size[1], 10, 10, 10, 10]
-                            width: 1.5
-                        
-                        Color:
-                            rgba: (237/255, 162/255, 22/255, .5)
-                        
-                        Line:
-                            rounded_rectangle: [self.pos[0], self.pos[1], self.size[0], self.size[1], 10, 10, 10, 10]
-
+                FBoxLayout:
                     ScrollView:
                         scroll_type: ["bars"]
                         bar_color: (.9, .9, .9, .9)
                         bar_width: dp(20)
-                        #padding: dp(5), dp(0) ,dp(0), dp(5)
                         do_scroll_y: True
                         
                         MDBoxLayout:
                             orientation: 'vertical'
                             adaptive_height: True
-                            padding: dp(10), dp(0), dp(10), dp(0)
                             spacing: dp(5)
 
                             MDLabel:
@@ -371,107 +277,99 @@
                                 size: (self.size[0], 50)
                             
                             MDLabel:
-                                text: '[size=14][color=#EDA216]Los Alumnos deberán realizar sus horarios en el día asignado por la facultad.[/color][/size]'
+                                text: '[size=15][color=#EDA216]Las cuentas de rectoria tienen los permisos para agregas mas cuentas de la misma, además de cuentas para profesores, alumnos y agregar horarios.[/color][/size]'
                                 markup: True
                                 halign: 'justify' #['left', 'center', 'right', 'justify', 'auto']
-                                valign: 'top'
+                                valign: 'center'
                                 size_hint_y: None
                                 size: (self.size[0], 60)
-                            
-                            MDLabel:
-                                text: ''
-                                size_hint_y: None
-                                size: (self.size[0], 30)
 
-                            RSearch:
+                            FFinder:
                                 id: del_enrollment
                                 name: 'del_enrollment'
 
-                                #size: (add_enrollment.size[0], add_enrollment.size[1]+50)
-
-                            RTextField:
+                                hint_text: 'Matricula'
+                                
+                            FTextField:
                                 id: del_middle_name
                                 name: 'del_middle_name'
 
                                 hint_text: "Primer Apellido"
                                 disabled: True
-                                when: False
+                                active: True
+                                leng: 30
                             
-                            RTextField:
+                            FTextField:
                                 id: del_last_name
                                 name: 'del_last_name'
 
                                 hint_text: 'Segundo Apellido'
                                 disabled: True
-                                when: False
+                                active: True
+                                leng: 30
                             
-                            RTextField:
+                            FTextField:
                                 id: del_name
                                 name: 'del_name'
 
                                 hint_text: 'Nombre'
                                 disabled: True
-                                when: False
+                                active: True
+                                leng: 50
                             
-                            ROptions:
-                                id: del_faculty
-                                name: 'add_faculty'
+                            FSearcher:
+                                id: del_faculties
+                                name: 'del_faculties'
 
                                 hint_text: 'Facultades'
                                 disabled: True
+                                leng: 150
                             
-                            ROptions:
-                                id: del_career
-                                name: 'add_career'
+                            FSearcher:
+                                id: del_careers
+                                name: 'del_careers'
 
                                 hint_text: 'Carreras'
                                 disabled: True
-                            
-                            RKardexButton:
+                                leng: 240
+
+                            FKardex:
                                 id: del_kardex
                                 name: 'del_kardex'
 
-                                disabled: True
-                                size_hint_y: None
-                                size: (self.size[0], 50)
-                            
-                            RTextField:
+                            FTextField:
                                 id: del_email
                                 name: 'del_email'
 
                                 hint_text: 'Correo Universitario'
                                 disabled: True
-                                when: True
+                                active: False
+                                leng: 40
                             
-                            RTextField:
+                            FTextField:
                                 id: del_pass
                                 name: 'del_pass'
 
                                 hint_text: 'Contraseña'
                                 disabled: True
-                                when: True
+                                active: False
+                                leng: 16
 
                             MDFloatLayout:
                                 cols: 1
                                 size_hint_y: None
-                                size: (1, 40)
-
-                                RCancelButton:
+                                size: (self.size[0], 50)
+                                FCancelButton:
                                     id: del_cancel
                                     name: 'del_cancel'
-                                    
-                                    text: 'Cancelar'
+
+                                    text: 'Limpiar'
                                     disabled: True
 
-                                RActionButton:
+                                FActionButton:
                                     id: del_save
                                     name: 'del_save'
 
-                                    text: 'Borrar Estudiante'
+                                    text: 'Guardar Modificaciones'
                                     disabled: True
-                                    x: del_cancel.x - self.size[0] - 10
-                                    y: del_cancel.y
-                                
-                            MDLabel:
-                                size_hint_y: None
-                                size: (self.size[0], 20)
+                                    x: upd_cancel.x - 5 - self.size[0]

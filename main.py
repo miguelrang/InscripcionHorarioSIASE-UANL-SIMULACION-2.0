@@ -1,4 +1,5 @@
-import pyodbc as SQLServer
+#from kivy.clock import Clock
+#Clock.max_iteration = 500
 
 from kivymd.app import MDApp
 from kivymd.uix.dialog import MDDialog
@@ -12,14 +13,14 @@ Config.set('graphics', 'position', 'custom')
 from kivy.utils import platform
 #from kivy.uix.screenmanager import Screen
 from kivy.uix.screenmanager import ScreenManager
-#from kivy.clock import Clock
-
 from Login import Login
 from SIASE import SIASE
 from Rectory import Rectory
 from Options import Options
 #from Mod import Mod
 #from Delete import Delete 
+
+import pyodbc as SQLServer
 
 """
 from PIL import Image
@@ -39,7 +40,6 @@ class main(MDApp):
 			self.icon = "images/icon.png"
 
 		self.title = "Servicios en Linea"
-		#self.theme_cls.theme_style = ''
 		Window.size = (700, 450)
 		
 		wm = WindowManager()

@@ -9,7 +9,7 @@ from kivymd.app import MDApp
 from kivymd.uix.tab import MDTabsBase
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.label import MDLabel
-from kivymd.uix.textfield import MDTextFieldRect
+from kivymd.uix.textfield import MDTextFieldRect, MDTextField#Round
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRaisedButton, MDFlatButton
 from kivymd.uix.menu import MDDropdownMenu
@@ -47,6 +47,7 @@ class Schedule(MDFloatLayout, MDTabsBase):
 	''''''
 
 Builder.load_file("Form.kv")
+"""
 class RTextField(MDTextFieldRect):
 	''''''
 
@@ -70,10 +71,48 @@ class RActionButton(MDRaisedButton):
 class RSearch(MDBoxLayout):
 	''''''
 
+class RSearchClassroom(MDTextFieldRect):
+	''''''
+
+class RSearchSubject(MDTextFieldRect):
+	''''''
+
 class ROptions(MDTextFieldRect):
 	''''''
 
 class RKardexButton(Button):
+	''''''
+
+"""
+class FBoxLayout(MDBoxLayout):
+	''''''
+class FFinder(MDTextField):
+	''''''
+class FLabel(MDLabel):
+	''''''
+class FTextField(MDTextFieldRect):
+	def shortField(name:str) -> str:
+		"""	We validate if the length of the text is longer than
+			what is accepted.
+		Args:
+			name (str): Text field hint
+		Returns:
+			str: text shorted
+		"""
+		if len(text) > leng:
+			app.showBanner(
+				title='¡Atención!',
+				text='La longitud de \'{}\' del aula no puede ser mayor de {}.'.format(name, leng)
+			)
+		return text[:leng]
+
+class FSearcher(MDTextFieldRect):
+	''''''
+class FKardex(Button):
+	''''''
+class FCancelButton(MDFlatButton):
+	''''''
+class FActionButton(MDRaisedButton):
 	''''''
 
 class Rectory(Screen):
@@ -82,6 +121,7 @@ class Rectory(Screen):
 		global app
 		app = MDApp.get_running_app()
 
+		'''
 		self.tab = {'rector':{}, 'teacher':{}, 'student':{}, 'classroom':{}, 'schedule':{}}
 		self.setInititalData('rector', 'add')
 		self.setInititalData('rector', 'upd')
@@ -102,15 +142,16 @@ class Rectory(Screen):
 		self.setInititalData('schedule', 'add')
 		self.setInititalData('schedule', 'upd')
 		self.setInititalData('schedule', 'del')
-		
+		'''
+
 		global tclass
 		tclass = {
 			#'rlabel': type(RLabel()),
-			'rfield': type(RTextField()),
+			#'rfield': type(RTextField()),
 			#'rbuttons': type(RButtons()),
-			'rsearch': type(RSearch()),
-			'roptions': type(ROptions()),
-			'rkbutton': type(RKardexButton())
+			#'rsearch': type(RSearch()),
+			#'roptions': type(ROptions()),
+			#'rkbutton': type(RKardexButton())
 		}
 		
 		self.selected = {'upd': {'rector':{}, 'teacher':{}, 'student':{}, 'schedule':{}}}
@@ -120,8 +161,21 @@ class Rectory(Screen):
 		self.main_tab = 'rector'
 		self.secondary_tab = 'add'
 
-		self.menu = MDDropdownMenu()
+		self.menu = MDDropdownMenu(position='bottom')
 		self.menu_items = []
+
+
+	def setData(self, id_rector=int(), employee=str()) -> None:
+		"""	Get the rectory employee id and name, we
+			show this data and initialize the forms.
+		Args:
+			id_rector (int): employee id
+			employee (str): employee name
+		Returns: None
+		"""
+		
+		self.ids["enrollment"].text = "[color=#ffffff][b]Matricula:[/b] {}[/color]".format(id_rector)
+		self.ids["employee"].text = "[color=#ffffff][b]Empleado:[/b] {}[/color]".format(employee)
 
 
 	def setTab(self, main_tab:bool, instance_tabs:object, instance_tab:object, instance_tab_label:object, tab_text:str)-> None:
@@ -175,6 +229,52 @@ class Rectory(Screen):
 			self.secondary_tab = tab
 
 
+	def text_validate(self, field:object, text:str, leng:int) -> None:
+		""" Get a field, its name and text too. If text is not like is
+			required in database, we modify it. Finally we update it.
+		Args:
+			field (object): Field we are writing.
+			text (str): Text of field.
+			leng (int): Maximum length for the field.
+		Returns: None
+		"""
+		if field.active:
+			if 'name' in field.name:
+				text = text.title()
+				
+				nums = set('0123456789') & set(text)
+				if nums:
+					app.openDialog(
+						title='Atención',
+						text='No se permiten números en el nombre o apellido.'
+					)
+					for num in nums:
+						text = text.replace(num, '')
+
+			elif 'classroom' in field.name:
+				text = text.upper()
+
+			chars = '¬°!"#$%/()=\'?\\¿¡´¨*+~{^[]},;.-_'
+			text_alert = 'Este campo no admite caracteres especiales'
+			if 'classroom' not in field.name:
+				chars += '|:'
+				text_alert += ' (excepciones: \'|\', \':\')'
+			text_alert += '.'
+			
+			chars = set(text) & set(chars)
+			if chars:
+				app.showBanner(
+					title='¡Atención!',
+					text=text_alert
+				)
+				for char in chars:
+					text = text.replace(char, '')
+
+			field.text = text
+		else:
+			field.text = ''
+
+	'''
 	def setWidget(self, wdg:object):
 		recycle_grid = self.ids[self.main_tab].ids[self.secondary_tab].ids.recycle_grid
 		for wdg_grid in recycle_grid.children:
@@ -270,11 +370,9 @@ class Rectory(Screen):
 			length (int): equivalent to max text length
 		Returns: None
 		"""
-		print(name)
-		print(field, field.hint_text)
-		print(text)
 		if field.input_filter == 'int':
-			pass
+			self.tab[self.main_tab][self.secondary_tab][name] = text
+
 		elif field.hint_text not in ['Matricula', 'Correo Universitario', 'Contraseña']:
 			if field.focus == False:
 				if field.input_filter != 'int' and set(text)&set("0123456789"):
@@ -286,7 +384,6 @@ class Rectory(Screen):
 				for num in '0123456789': text = text.replace(num, '')
 
 				field.text = text
-				print(self.main_tab, self.secondary_tab)
 				self.tab[self.main_tab][self.secondary_tab][name] = text
 				
 		else: # The field is the Enrollment, Email or Password
@@ -325,7 +422,7 @@ class Rectory(Screen):
 
 
 	@mainthread
-	def showClassrooms(self, caller:object, searching:str, id_classroom=None, classroom=None, banches=None, action=None) -> None:
+	def showClassrooms(self, caller:object, searching:str, widget=None) -> None:
 		"""	We search coincidences from 'searching' variable and
 			we shows them on screen.
 		Args:
@@ -344,28 +441,27 @@ class Rectory(Screen):
 			Returns: None
 			"""
 			data = app.execute("getClassroom '{}', '{}'".format(data.split(': ')[0], data.split(': ')[1]))[0]
-			id_classroom.text = str(data[0])
-			classroom.text = str(data[1])
-			banches.text = str(data[2])
 			
-			if 'upd' == self.secondary_tab:
-				classroom.disabled = False
-				banches.disabled = False
-			action.disabled = False
+			i = 0
+			for wdg in widget.values():
+				wdg.text = str(data[i]) if 'save' not in wdg.name else wdg.text # ignore button
+				wdg.text = '' if self.main_tab == 'schedule' and 'subject' in wdg.name else wdg.text # clear schedule
+
+				if 'upd' == self.secondary_tab and 'id_classroom' not in wdg.name:
+					wdg.disabled = False
+				elif 'del' == self.secondary_tab and 'del_save' == wdg.name:
+					wdg.disabled = False
+
+				i += 1
 
 		def clearFieldsContent() -> None:
 			""" We clear the content fields.
 			Args: None
 			Returns: None
 			"""
-			id_classroom.text = ''
-			classroom.text = ''
-			banches.text = ''
-			
-			if 'upd' == self.secondary_tab:
-				classroom.disabled = True
-				banches.disabled = True
-			action.disabled = True
+			for wdg in widget.values():
+				wdg.text = '' if 'save' not in wdg.name else wdg.text
+				wdg.disabled = True
 
 
 		if caller.text != '':
@@ -395,7 +491,7 @@ class Rectory(Screen):
 				except:
 					pass
 			else:
-				self.menu.width_mult=4
+				self.menu.width_mult=7.1
 				self.menu.open()
 		else:
 			self.menu.dismiss()
@@ -409,19 +505,6 @@ class Rectory(Screen):
 	def showKardex(self, forms:dict, button:object, enrollment:str, employee:str):
 		if app.root.get_screen('options').setData(forms, button, enrollment, employee, self.secondary_tab):
 			app.root.current='options'
-
-
-	def setData(self, id_rector=int(), employee=str()) -> None:
-		"""	Get the rectory employee id and name, we
-			show this data and initialize the forms.
-		Args:
-			id_rector (int): employee id
-			employee (str): employee name
-		Returns: None
-		"""
-		
-		self.ids["enrollment"].text = "[color=#ffffff][b]Matricula:[/b] {}[/color]".format(id_rector)
-		self.ids["employee"].text = "[color=#ffffff][b]Empleado:[/b] {}[/color]".format(employee)
 				
 
 	def setInititalData(self, tab:str, sub_tab:str)-> None:
@@ -508,20 +591,25 @@ class Rectory(Screen):
 					'enrollment': ''
 				}
 			},
+			'classroom': {
+				'add': {
+					'faculty': '', # str
+					'classroom': '', # str
+					'banches': '' # str
+				},
+				'upd':{
+					'id_classroom': '', # str
+					'faculty': '', # str
+					'classroom': '', # str
+					'banches': '' # str
+				},
+				'del':{
+					'id_classroom': '' #str
+				}
+			},
 			'schedule': {
 				'add': {
 					
-				},
-				'upd':{
-					
-				},
-				'del':{
-
-				}
-			},
-			'classroom': {
-				'add': {
-					'classroom': ''
 				},
 				'upd':{
 					
@@ -544,326 +632,8 @@ class Rectory(Screen):
 			data (dict): Data to save
 		Returns: None
 		"""
-		print(data)
-		'''
-		def isCorrect(data:dict, sub_tab:str) -> bool:
-			""" Get the data of an employee, teacher, student or a new schedule
-				and it validates all the fields are filled.
-			Args:
-				data (dict): Data to validate.
-			Returns:
-				bool: True = is correct & False = is not correct. 
-			"""
-			correct = True
-			print('isCorrect')
-			print(data)
-			for key in data:
-				if not data[key]:
-					if sub_tab == 'add' and key == 'email' or key == 'enrollment' or key == 'pass':
-						pass
-					else:
-						correct = False
-						print('{}: {}'.format(key, data[key]))
-						print('/isCorrect')
-						break
-			print('/isCorrect')
-
-			return correct
-
-		def userExist(tab:str, sub_tab:str, data:dict) -> bool:
-			""" Get the data, main tab, secondary tab and then
-				validate it account exist.
-			Args:
-				tab (str): type account ('rector', 'teacher', 'student')
-				sub_tab (str): action ('add', 'upd', 'del')
-				data (dict): data of account
-			Returns:
-				bool: True = user exist & False = user not exist
-			"""
-			if tab == 'rector':
-				typ = 1
-
-			elif tab == 'teacher':
-				typ = 2
-
-			else:
-				typ = 3
-
-			print("userExist")
-			print(data)
-			if sub_tab == 'add':
-				if account_exist:
-				print(True)
-				print('/userExist')
-				return True # User exist
-
-			else:
-				print(False)
-				print('/userExist')
-				return False # Not exist
-			else:
-				return True
-
-
-		def isModified(d1:dict):
-			"""	Get the selected data before modifying and the 'modified',
-				and we validate if it was modified.
-			Agrs:
-				d1 (dict):
-			Returns:
-				tuple (bool, bool): (True = is modified & False = is not modified), 
-									(True = name is modified & False = is not modified).
-			"""
-			modified = False
-			print('isModified')
-			print('d1', d1)
-			if self.secondary_tab == 'upd':
-				d2 = self.selected[self.secondary_tab][self.main_tab]
-				print('d2', d2)
-				if d1['name'] != d2['name'] or d1['middle_name'] != d2['middle_name'] or d1['last_name'] != d2['last_name']:
-					modified = True
-
-				print('/isModified')
-				return d1 != d2, modified
-			else:
-				print('/isModified')
-				return None, None
+		print('alterTable', data)
 		
-
-		def getEmail(typ:int, name:str, middle_name:str, last_name:str) -> str:
-			"""	Generate the email for the user taking de args 
-				and then returns it.
-			Args:
-				typ (int): type is the main tab (rector, teacher or student)
-				name (str): first name (and second name)
-				middle_name (str): father's 'name'
-				last_name (str): mother's 'name'
-			Returns:
-				str: nonexistent email
-			"""
-			def nonexistenEmail(typ:int, email:str) -> str:
-				"""	Get the email, validate it exist and returns it
-					a nonexistent version.
-				Args:
-					typ (int): type is the main tab (rector, teacher or student)
-					email (str): user email
-				Returns:
-					str: email 'modified'
-				"""
-				splited = email.split('@')
-				max_email = app.execute("GetMaxEmail '{}', '{}'".format(typ, '{}%'.format(splited[0])))
-				if max_email[0][0] != None:
-					n:str = max_email[0][0].split('@')[0].replace(splited[0], '')
-					if n != '':
-						n = int(n) + 1
-					email:str = splited[0] + '{}@'.format(n) + splited[1]
-				
-				return email
-
-			#print(name, middle_name, last_name)
-			shortened = last_name[0] + last_name[len(last_name)-1]
-			email = '{}.{}{}@uanl.edu.mx'.format(name, middle_name, shortened)
-			email = email.lower()
-
-			return nonexistenEmail(typ, email)
-
-
-		def getPassword() -> str:
-			"""	Gen the random password and then returns it.
-			Agrs: None
-			Returns:
-				str: random password
-			"""
-			chars = 'abcdefghijklmnñopqrstuvwxyz'
-			chars += chars.upper()
-			chars += '0123456789'
-			password = ''
-			for i in range(8):
-				password += random.choice(chars)
-
-			return password
-
-		def fillEmptyFields(tab:str, sub_tab:str, data:dict) -> None:
-			"""	Get data and fill the empty fields
-			Args:
-				tab (str): main tab
-				sub_tab (str): secondary tab
-				data (dict): data of recory employee, teacher
-							 or student
-			Returns: None
-			"""
-			keys = data.keys()
-			for child in self.ids[tab].ids[sub_tab].ids.recycle_grid.children:
-				if child.viewclass != tclass['rlabel'] and child.viewclass != tclass['rbuttons']:
-					child.disabled = True
-
-				elif child.viewclass == tclass['rsearch']:
-					child.disable = True
-
-				if child.name in keys:
-					child.text = data[child.name]
-				
-
-		if isCorrect(data, sub_tab):
-			user_exist:bool = userExist(tab, sub_tab, data)
-			# user shuld not exist for adding & shuld exist for upd or del
-			if (user_exist and sub_tab != 'add') or (not user_exist and sub_tab == 'add'):
-				is_modified:bool = isModified(data) # tuple (is modified, is name modified)
-				# is data modified for update? if sub tab == 'upd' or sub tab == 'del' is no important
-				if (is_modified[0] and self.secondary_tab == 'upd') or (self.secondary_tab in ['add', 'del']):
-					if tab == 'rector':
-						n = 1
-					elif tab == 'teacher':
-						n = 2
-					else:
-						n = 3
-
-					print(data)
-					#raise Exception('Siuu')
-					if sub_tab in ['add', 'upd'] and tab in ['rector', 'teacher', 'student']:
-						data["email"] = getEmail(n, data["name"], data["middle_name"], data["last_name"])
-						if sub_tab == 'add':
-							data["pass"] = getPassword()
-							print(data)
-
-						else: # sub_tab == 'upd'
-							# user name exist?
-							got = app.execute("GetAccount '{}', '{}', '{}', '{}', '{}'".format(n, data["enrollment"], data["middle_name"], data["last_name"], data["name"]))
-							print('USER FOUND')
-							print(got)
-							if got:
-								tab = ''
-
-					if tab == "rector":
-						app.execute(
-							"AlterRectoryTable '{}', '{}', '{}', '{}', '{}', '{}', '{}'".format(
-								data["enrollment"],
-								data["name"], 
-								data["middle_name"],
-								data["last_name"],
-								data["email"], 
-								data["pass"], 
-								sub_tab
-							)
-						)
-
-						if sub_tab in ['add', 'upd']:
-							if sub_tab == 'add':
-								data["enrollment"] = str(
-									app.execute(
-										"GetIDEmployee '{}', '{}', '{}', '{}', '{}'".format(
-											data["middle_name"],
-											data["last_name"],
-											data["name"],
-											data["email"],
-											data["pass"]
-										)
-									)[0][0]
-								)
-								text = 'El Empleado se a Guardado Correctamente.'
-							else:
-								text = 'Los Datos del Empleado se Actualizaron Correctamente.'
-							fillEmptyFields(tab, sub_tab, data)
-						
-						else: # del
-							text = 'Los Datos del Empleado han sido Eliminados Correctamente.'
-						
-					elif tab == "teacher":
-						for c in data["career"].split(', '):
-							app.execute(
-								"AlterTeacherTable '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}'".format(
-									data["enrollment"],
-									data["name"], 
-									data["middle_name"],
-									data["last_name"],
-									c.split(': ')[0], # id career
-									data["email"],
-									data["pass"], 
-									sub_tab
-								)
-							)
-
-						if sub_tab == 'add':
-							app.execute("UpdateAddedTeacher '{}', '{}', '{}', '{}', '{}'".format(
-								data["middle_name"],
-								data["last_name"],
-								data["name"],
-								data["email"],
-								data["pass"]
-							))
-
-							data["enrollment"] = str(
-								app.execute("GetUpdatedAddedTeacher '{}', '{}', '{}', '{}', '{}'".format(
-									data["middle_name"],
-									data["last_name"],
-									data["name"],
-									data["email"],
-									data["pass"]
-								))[0][0]
-							)
-							print(data)
-
-							fillEmptyFields(tab, sub_tab, data)
-							text = 'El Profesor se a Guardado Correctamente.'
-						elif sub_tab == 'upd':
-							text = 'Los Datos del Profesor se Actualizaron Correctamente.'
-						else: # del
-							text = 'El datos del Profesor han sido Eliminados Correctamente.'
-
-					elif tab == "student":
-						app.execute(
-							"AlterStudentTable '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}'".format(
-								data["enrollment"],
-								data["name"], 
-								data["middle_name"],
-								data["last_name"],
-								data["faculty"],
-								data["career"],
-								data["pass"],
-								data["try"], 
-								sub_tab
-							)
-						)
-
-					elif tab == 'schedule':
-						app.execute()
-
-					if tab == '':
-						app.showBanner(
-							title='¡No se pudieron hacer las modificaciones!',
-							text='El usuario ya existe.'
-						)
-
-					else:
-						app.showBanner(
-							title='¡Proceso Realizado con Éxito!',
-							text=text
-						)
-
-				else:
-					app.showBanner(
-						title='Sin Modificaciones',
-						text='Aún no se modifica ningún dato.'
-					)
-			else:
-				if user_exist and sub_tab == 'add':
-					app.showBanner(
-						title="¡Error de Almacenamiento!",
-						text="Lo sentimos, no se ha podido guardar este usuario porque ya existe."
-					)
-
-				elif not user_exist and sub_tab != 'add': 
-					app.showBanner(
-						title="¡No se ha Ecnontrado el Usuario!",
-						text="Lo sentimos, no hemos podido encontrar al usuario en nuestra base de datos."
-					)
-		else:
-			app.showBanner(
-				title="Aún hay campos por llenar",
-				text="Por favor, llene todos los campos."
-			)
-	'''
-
 
 	def setInitialStateForm(self, tab:str, sub_tab:str) -> None:
 		""" Get the parent and child tab, and then set 
@@ -907,4 +677,4 @@ class Rectory(Screen):
 	def exit(self):
 		pass
 
-	
+	'''
