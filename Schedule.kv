@@ -17,62 +17,81 @@
                 title: 'Agregar'
 
                 FBoxLayout:
-                    spacing: dp(5)
-                
-                    MDLabel:
-                        text: '[b][size=20][color=#05396E]Datos del Aula[/color][/size][/b]'
-                        markup: True
-                        halign: 'left'
-                        valign: 'center'
-                        size_hint_y: None
-                        size: (self.size[0], 50)
+                    ScrollView:
+                        scroll_type: ["bars"]
+                        bar_color: (.9, .9, .9, .9)
+                        bar_width: dp(20)
+                        do_scroll_y: True
                     
-                    MDLabel:
-                        text: '[size=15][color=#EDA216]Las cuentas de rectoria tienen los permisos para agregas mas cuentas de la misma, además de cuentas para profesores, alumnos y agregar horarios.[/color][/size]'
-                        markup: True
-                        halign: 'justify' #['left', 'center', 'right', 'justify', 'auto']
-                        valign: 'center'
-                        size_hint_y: None
-                        size: (self.size[0], 60)
-
-                    FSearcher:
-                        id: add_faculty
-                        name: 'add_faculty'
-
-                        hint_text: "Facultad"
-                        leng: 50
+                        MDBoxLayout:
+                            orientation: 'vertical'
+                            adaptive_height: True
+                            spacing: dp(5)
                     
-                    FTextField:
-                        id: add_classroom
-                        name: 'add_classroom'
+                            FLabel:
+                                text: '[b][size=20][color=#05396E]Datos del Horario[/color][/size][/b]'
+                                
+                            FLabel:
+                                text: '[size=15][color=#EDA216]Las cuentas de rectoria tienen los permisos para agregas mas cuentas de la misma, además de cuentas para profesores, alumnos y agregar horarios.[/color][/size]'
+                                
+                            FSearcher:
+                                id: add_faculty
+                                name: 'add_faculty'
 
-                        hint_text: 'Nombre del Aula (Ej. (1): 201, (2): Laboratorio)'
-                        leng: 100
-                    
-                    FTextField:
-                        id: add_banches
-                        name: 'add_banches'
+                                hint_text: "Facultad"
+                                leng: 50
+                            
+                            FSearcher:
+                                id: add_classroom
+                                name: 'add_classroom'
 
-                        hint_text: 'Bancos Disponibles'
-                        active: True
-                        leng: 3
-                    
-                    MDFloatLayout:
-                        cols: 1
-                        size_hint_y: None
-                        size: (self.size[0], 50)
-                        FCancelButton:
-                            id: add_cancel
-                            name: 'add_cancel'
+                                hint_text: 'Nombre del Aula (Ej. (1): 201, (2): Laboratorio)'
+                                leng: 100
+                            
+                            FSearcher:
+                                id: add_subject
+                                name: 'add_subject'
 
-                            text: 'Limpiar'
+                                hint_text: 'Materia'
+                                leng: 100
+                            
+                            FSearcher:
+                                id: add_teacher
+                                name: 'add_teacher'
 
-                        FActionButton:
-                            id: add_save
-                            name: 'add_save'
-                            text: 'Guardar Empleado'
-                            x: add_cancel.x - 5 - self.size[0]
-                        
+                                hint_text: 'Nombre del Profesor'
+                                leng: 110
+                            
+                            FSearcher:
+                                id: add_schedule
+                                name: 'add_schedule'
+
+                                hint_text: 'Horario'
+                                leng: 130
+                            
+                            FTextField:
+                                id: add_group
+                                name: 'add_group'
+
+                                hint_text: 'Grupo'
+                                leng: 3
+
+                            MDFloatLayout:
+                                cols: 1
+                                size_hint_y: None
+                                size: (self.size[0], 50)
+                                FCancelButton:
+                                    id: add_cancel
+                                    name: 'add_cancel'
+
+                                    text: 'Limpiar'
+
+                                FActionButton:
+                                    id: add_save
+                                    name: 'add_save'
+                                    text: 'Guardar Empleado'
+                                    x: add_cancel.x - 5 - self.size[0]
+                                
             Update:
                 id: upd
                 name: 'upd'
@@ -80,73 +99,97 @@
                 title: 'Actualizar'
 
                 FBoxLayout:
-                    spacing: dp(5)
+                    ScrollView:
+                        scroll_type: ["bars"]
+                        bar_color: (.9, .9, .9, .9)
+                        bar_width: dp(20)
+                        do_scroll_y: True
                     
-                    MDLabel:
-                        text: '[b][size=20][color=#05396E]Datos del Aula[/color][/size][/b]'
-                        markup: True
-                        halign: 'left'
-                        valign: 'center'
-                        size_hint_y: None
-                        size: (self.size[0], 50)
+                        MDBoxLayout:
+                            orientation: 'vertical'
+                            adaptive_height: True
+                            spacing: dp(5)
                     
-                    MDLabel:
-                        text: '[size=15][color=#EDA216]Las cuentas de rectoria tienen los permisos para agregas mas cuentas de la misma, además de cuentas para profesores, alumnos y agregar horarios.[/color][/size]'
-                        markup: True
-                        halign: 'justify' #['left', 'center', 'right', 'justify', 'auto']
-                        valign: 'center'
-                        size_hint_y: None
-                        size: (self.size[0], 60)
+                            FLabel:
+                                text: '[b][size=20][color=#05396E]Datos del Horario[/color][/size][/b]'
+                                
+                            FLabel:
+                                text: '[size=15][color=#EDA216]Las cuentas de rectoria tienen los permisos para agregas mas cuentas de la misma, además de cuentas para profesores, alumnos y agregar horarios.[/color][/size]'
+                                markup: True
+                                
+                            FFinder:
+                                id: upd_finder_schedule
+                                name: 'upd_finder_schedule'
 
-                    FFinder:
-                        id: upd_finder_classroom
-                        name: 'upd_finder_classroom'
+                                hint_text: 'Nomre_Aula: Nombre_Materia'
+                                
+                            FSearcher:
+                                id: upd_faculty
+                                name: 'upd_faculty'
 
-                        hint_text: 'Nombre_Aula: Nombre_Facultad'
-                        
-                    FSearcher:
-                        id: upd_faculty
-                        name: 'upd_faculty'
+                                hint_text: 'Facultad'
+                                disabled: True
+                                leng: 50
+                            
+                            FSearcher:
+                                id: upd_classroom
+                                name: 'upd_classroom'
 
-                        hint_text: "Facultad"
-                        disabled: True
-                        leng: 50
-                    
-                    FSearcher:
-                        id: upd_classroom
-                        name: 'upd_classroom'
+                                hint_text: 'Nombre del Aula'
+                                disabled: True
+                                leng: 100
+                            
+                            FSearcher:
+                                id: upd_subject
+                                name: 'upd_subject'
 
-                        hint_text: "Nombre del Aula (Ej. (1): 201, (2): Laboratorio)"
-                        disabled: True
-                        leng: 80
-                    
-                    FTextField:
-                        id: upd_banches
-                        name: 'upd_banches'
+                                hint_text: 'Materia'
+                                disabled: True
+                                leng: 100
+                            
+                            FSearcher:
+                                id: upd_teacher
+                                name: 'upd_teacher'
 
-                        hint_text: 'Nombre'
-                        disabled: True
-                        leng: 3
-                    
-                    MDFloatLayout:
-                        cols: 1
-                        size_hint_y: None
-                        size: (self.size[0], 50)
-                        FCancelButton:
-                            id: upd_cancel
-                            name: 'upd_cancel'
+                                hint_text: 'Nombre del Profesor'
+                                disabled: True
+                                leng: 110
+                            
+                            FSearcher:
+                                id: upd_schedule
+                                name: 'upd_schedule'
 
-                            text: 'Limpiar'
-                            disabled: True
+                                hint_text: 'Horario'
+                                disabled: True
+                                leng: 130
+                            
+                            FSearcher:
+                                id: upd_group
+                                name: 'upd_group'
 
-                        FActionButton:
-                            id: upd_save
-                            name: 'upd_save'
+                                hint_text: 'Grupo (Ej. 067)'
+                                disabled: True
+                                leng: 150
+                            
+                            MDFloatLayout:
+                                cols: 1
+                                size_hint_y: None
+                                size: (self.size[0], 50)
+                                FCancelButton:
+                                    id: upd_cancel
+                                    name: 'upd_cancel'
 
-                            text: 'Guardar Modificaciones'
-                            disabled: True
-                            x: upd_cancel.x - 5 - self.size[0]
-        
+                                    text: 'Limpiar'
+                                    disabled: True
+
+                                FActionButton:
+                                    id: upd_save
+                                    name: 'upd_save'
+
+                                    text: 'Guardar Modificaciones'
+                                    disabled: True
+                                    x: upd_cancel.x - 5 - self.size[0]
+                
             Delete:
                 id: del
                 name: 'del'
@@ -154,90 +197,92 @@
                 title: 'Eliminar'
 
                 FBoxLayout:
-                    spacing: dp(5)
+                    ScrollView:
+                        scroll_type: ["bars"]
+                        bar_color: (.9, .9, .9, .9)
+                        bar_width: dp(20)
+                        do_scroll_y: True
                     
-                    MDLabel:
-                        text: '[b][size=20][color=#05396E]Datos del Aula[/color][/size][/b]'
-                        markup: True
-                        halign: 'left'
-                        valign: 'center'
-                        size_hint_y: None
-                        size: (self.size[0], 50)
+                        MDBoxLayout:
+                            orientation: 'vertical'
+                            adaptive_height: True
+                            spacing: dp(5)
                     
-                    MDLabel:
-                        text: '[size=15][color=#EDA216]Las cuentas de rectoria tienen los permisos para agregas mas cuentas de la misma, además de cuentas para profesores, alumnos y agregar horarios.[/color][/size]'
-                        markup: True
-                        halign: 'justify' #['left', 'center', 'right', 'justify', 'auto']
-                        valign: 'center'
-                        size_hint_y: None
-                        size: (self.size[0], 60)
+                            FLabel:
+                                text: '[b][size=20][color=#05396E]Datos del Horario[/color][/size][/b]'
+                                
+                            FLabel:
+                                text: '[size=15][color=#EDA216]Las cuentas de rectoria tienen los permisos para agregas mas cuentas de la misma, además de cuentas para profesores, alumnos y agregar horarios.[/color][/size]'
+                                
+                            FFinder:
+                                id: upd_finder_schedule
+                                name: 'upd_finder_schedule'
 
-                    FFinder:
-                        id: del_enrollment
-                        name: 'del_enrollment'
+                                hint_text: 'Nomre_Aula: Nombre_Materia'
+                                
+                            FSearcher:
+                                id: upd_faculty
+                                name: 'upd_faculty'
 
-                        hint_text: 'Matricula'
-                        
-                    FTextField:
-                        id: del_middle_name
-                        name: 'del_middle_name'
+                                hint_text: 'Facultad'
+                                disabled: True
+                                leng: 50
+                            
+                            FSearcher:
+                                id: upd_classroom
+                                name: 'upd_classroom'
 
-                        hint_text: "Primer Apellido"
-                        disabled: True
-                        active: True
-                        leng: 30
-                    
-                    FTextField:
-                        id: del_last_name
-                        name: 'del_last_name'
+                                hint_text: 'Nombre del Aula'
+                                disabled: True
+                                leng: 100
+                            
+                            FSearcher:
+                                id: upd_subject
+                                name: 'upd_subject'
 
-                        hint_text: 'Segundo Apellido'
-                        disabled: True
-                        active: True
-                        leng: 30
-                    
-                    FTextField:
-                        id: del_name
-                        name: 'del_name'
+                                hint_text: 'Materia'
+                                disabled: True
+                                leng: 100
+                            
+                            FSearcher:
+                                id: upd_teacher
+                                name: 'upd_teacher'
 
-                        hint_text: 'Nombre'
-                        disabled: True
-                        active: True
-                        leng: 50
-                    
-                    FTextField:
-                        id: del_email
-                        name: 'del_email'
+                                hint_text: 'Nombre del Profesor'
+                                disabled: True
+                                leng: 110
+                            
+                            FSearcher:
+                                id: upd_schedule
+                                name: 'upd_schedule'
 
-                        hint_text: 'Correo Universitario'
-                        disabled: True
-                        active: False
-                        leng: 40
-                    
-                    FTextField:
-                        id: del_pass
-                        name: 'del_pass'
+                                hint_text: 'Horario'
+                                disabled: True
+                                leng: 130
+                            
+                            FSearcher:
+                                id: upd_group
+                                name: 'upd_group'
 
-                        hint_text: 'Contraseña'
-                        disabled: True
-                        active: False
-                        leng: 16
+                                hint_text: 'Grupo (Ej. 067)'
+                                disabled: True
+                                leng: 150
+                            
+                            MDFloatLayout:
+                                cols: 1
+                                size_hint_y: None
+                                size: (self.size[0], 50)
+                                FCancelButton:
+                                    id: upd_cancel
+                                    name: 'upd_cancel'
 
-                    MDFloatLayout:
-                        cols: 1
-                        size_hint_y: None
-                        size: (self.size[0], 50)
-                        FCancelButton:
-                            id: del_cancel
-                            name: 'del_cancel'
+                                    text: 'Limpiar'
+                                    disabled: True
 
-                            text: 'Limpiar'
-                            disabled: True
+                                FActionButton:
+                                    id: upd_save
+                                    name: 'upd_save'
 
-                        FActionButton:
-                            id: del_save
-                            name: 'del_save'
-
-                            text: 'Guardar Modificaciones'
-                            disabled: True
-                            x: upd_cancel.x - 5 - self.size[0]
+                                    text: 'Guardar Modificaciones'
+                                    disabled: True
+                                    x: upd_cancel.x - 5 - self.size[0]

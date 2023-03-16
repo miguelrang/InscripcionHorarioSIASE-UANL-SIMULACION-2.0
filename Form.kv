@@ -26,10 +26,19 @@
         Line:
             rounded_rectangle: [self.pos[0], self.pos[1], self.size[0], self.size[1], 10, 10, 10, 10]
 
+<FLabel>:
+    markup: True
+    halign: 'justify'# ['left', 'center', 'right', 'justify', 'auto']
+    valign: 'center'
+    size_hint_y: None
+    size: (self.size[0], 60)
+
 <FFinder>:
     icon_right: 'magnify'
+    current_hint_text_color: (0, 0, 0, 1)
+    line_color_normal: (0, 0, 0, 1)
     multiline: False
-
+    
 <FTextField>:
     size_hint_y: None
     size: self.size[0], 50

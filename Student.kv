@@ -28,22 +28,12 @@
                             adaptive_height: True
                             spacing: dp(5)
 
-                            MDLabel:
+                            FLabel:
                                 text: '[b][size=20][color=#05396E]Datos del Estudiante[/color][/size][/b]'
-                                markup: True
-                                halign: 'left'
-                                valign: 'center'
-                                size_hint_y: None
-                                size: (self.size[0], 50)
-                            
-                            MDLabel:
+                                
+                            FLabel:
                                 text: '[size=15][color=#EDA216]Las cuentas de rectoria tienen los permisos para agregas mas cuentas de la misma, además de cuentas para profesores, alumnos y agregar horarios.[/color][/size]'
-                                markup: True
-                                halign: 'justify' #['left', 'center', 'right', 'justify', 'auto']
-                                valign: 'center'
-                                size_hint_y: None
-                                size: (self.size[0], 60)
-
+                                
                             FTextField:
                                 id: add_middle_name
                                 name: 'add_middle_name'
@@ -82,6 +72,10 @@
                                 hint_text: 'Carreras'
                                 leng: 240
                             
+                            FKardex:
+                                id: add_kardex
+                                name: 'add_kardex'
+                            
                             FTextField:
                                 id: add_enrollment
                                 name: 'add_enrollment'
@@ -89,11 +83,7 @@
                                 hint_text: 'Matricula'
                                 active: False
                                 leng: 10
-                            
-                            FKardex:
-                                id: add_kardex
-                                name: 'add_kardex'
-                            
+                        
                             FTextField:
                                 id: add_email
                                 name: 'add_email'
@@ -144,22 +134,12 @@
                             adaptive_height: True
                             spacing: dp(5)
     
-                            MDLabel:
+                            FLabel:
                                 text: '[b][size=20][color=#05396E]Datos del Estudiante[/color][/size][/b]'
-                                markup: True
-                                halign: 'left'
-                                valign: 'center'
-                                size_hint_y: None
-                                size: (self.size[0], 50)
-                            
-                            MDLabel:
+                                
+                            FLabel:
                                 text: '[size=15][color=#EDA216]Las cuentas de rectoria tienen los permisos para agregas mas cuentas de la misma, además de cuentas para profesores, alumnos y agregar horarios.[/color][/size]'
-                                markup: True
-                                halign: 'justify' #['left', 'center', 'right', 'justify', 'auto']
-                                valign: 'center'
-                                size_hint_y: None
-                                size: (self.size[0], 60)
-
+                                
                             FFinder:
                                 id: upd_enrollment
                                 name: 'upd_enrollment'
@@ -212,6 +192,8 @@
                             FKardex:
                                 id: upd_kardex
                                 name: 'upd_kardex'
+
+                                disabled: True
 
                             FTextField:
                                 id: upd_email
@@ -268,22 +250,12 @@
                             adaptive_height: True
                             spacing: dp(5)
 
-                            MDLabel:
+                            FLabel:
                                 text: '[b][size=20][color=#05396E]Datos del Estudiante[/color][/size][/b]'
-                                markup: True
-                                halign: 'left'
-                                valign: 'center'
-                                size_hint_y: None
-                                size: (self.size[0], 50)
-                            
-                            MDLabel:
+                                
+                            FLabel:
                                 text: '[size=15][color=#EDA216]Las cuentas de rectoria tienen los permisos para agregas mas cuentas de la misma, además de cuentas para profesores, alumnos y agregar horarios.[/color][/size]'
-                                markup: True
-                                halign: 'justify' #['left', 'center', 'right', 'justify', 'auto']
-                                valign: 'center'
-                                size_hint_y: None
-                                size: (self.size[0], 60)
-
+                                
                             FFinder:
                                 id: del_enrollment
                                 name: 'del_enrollment'
@@ -336,6 +308,8 @@
                             FKardex:
                                 id: del_kardex
                                 name: 'del_kardex'
+
+                                disabled: True
 
                             FTextField:
                                 id: del_email
