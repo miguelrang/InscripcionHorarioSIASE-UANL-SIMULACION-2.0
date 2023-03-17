@@ -38,6 +38,10 @@
     current_hint_text_color: (0, 0, 0, 1)
     line_color_normal: (0, 0, 0, 1)
     multiline: False
+    query: None
+    widgets: None
+    buttons: None
+    on_text_validate: root.text_validate(this=self, query=self.query, widgets=self.widgets, buttons=self.buttons)
     
 <FTextField>:
     size_hint_y: None
@@ -46,12 +50,12 @@
     line_anim: False
     leng: None
     active: None
-    on_text: self.text = root.shortField()
+    on_text: root.text_validate(field=self, text=self.text, leng=self.leng)
     on_focus:
         if self.focus == True and self.active == False:\
         app.openDialog(title='Atención', text='En este campo no se puede editar.')
         
-        app.root.get_screen('rectory').text_validate(field=self, text=self.text, leng=self.leng)
+        root.text_validate(field=self, text=self.text, leng=self.leng)
 
 <FSearcher>:
     size_hint_y: None

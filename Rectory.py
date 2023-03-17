@@ -47,64 +47,169 @@ class Schedule(MDFloatLayout, MDTabsBase):
 	''''''
 
 Builder.load_file("Form.kv")
-"""
-class RTextField(MDTextFieldRect):
-	''''''
-
-#class RLabel(MDLabel):
-#	text = StringProperty()
-#	name = StringProperty()
-#	halign = OptionProperty("left", options=["left", "center", "right"])
-#	valign = OptionProperty("left", options=["left", "center", "bottom", "top"])
-#
-#class RButtons(MDFloatLayout):
-#	text = StringProperty()
-#	disabled = BooleanProperty()
-#	name = StringProperty()
-#	disable = BooleanProperty()
-class RCancelButton(MDFlatButton):
-	''''''
-
-class RActionButton(MDRaisedButton):
-	''''''
-
-class RSearch(MDBoxLayout):
-	''''''
-
-class RSearchClassroom(MDTextFieldRect):
-	''''''
-
-class RSearchSubject(MDTextFieldRect):
-	''''''
-
-class ROptions(MDTextFieldRect):
-	''''''
-
-class RKardexButton(Button):
-	''''''
-
-"""
 class FBoxLayout(MDBoxLayout):
 	''''''
 class FFinder(MDTextField):
-	''''''
+	def text_validate(self, this:object, query:str, widgets:list, buttons:list) -> None:
+		"""	Get this field (ffinder), we validate the input.
+			get_data_&&_fill_and_enable_fields if user_exist_||_data_exist else show_banner
+		Args:
+			this (object): Main field (ffinder).
+			data (list): List of field we will fill and enable.
+			buttons (list): Buttons and/or widgets we will enable.
+		Returns: None
+		"""
+		try:
+			data = app.execute(query)[0]
+		
+		except:
+			app.showBanner(
+				title='¡Lo sentimos!',
+				text='No pudimos encontrar \'{}\' en la base de datos. Por favor verifique que este correcto.'.format(this.text)
+			)
+			data = ['']*len(widgets)
+		
+		finally:
+			i = 0
+			for field in widgets:
+				field.text = str(data[i])
+				if 'faculties' in field.name:
+					faculties = set(field.text.split('; '))
+					field.text = ', '.join(faculties)
+				
+				if 'upd' in field.name:
+					field.disabled = data == (['']*len(widgets))
+				i += 1
+
+			for button in buttons:
+				button.disabled = data == (['']*len(widgets))
+			
+
 class FLabel(MDLabel):
 	''''''
 class FTextField(MDTextFieldRect):
-	def shortField(name:str) -> str:
-		"""	We validate if the length of the text is longer than
-			what is accepted.
+	def __init__(self, **kwargs):
+		super(FTextField, self).__init__(**kwargs)
+
+
+	def text_validate(self, field:object, text:str, leng:int) -> None:
+		""" Get a field, its name and text too. If text is not like is
+			required in database, we modify it. Finally we update it.
 		Args:
-			name (str): Text field hint
-		Returns:
-			str: text shorted
+			field (object): Field we are writing.
+			text (str): Text of field.
+			leng (int): Maximum length for the field.
+		Returns: None
 		"""
-		if len(text) > leng:
-			app.showBanner(
-				title='¡Atención!',
-				text='La longitud de \'{}\' del aula no puede ser mayor de {}.'.format(name, leng)
-			)
-		return text[:leng]
+		def shortFieldText(name:str) -> str:
+			"""	We validate if the length of the text is longer than
+				what is accepted.
+			Args:
+				name (str): Text field hint
+			Returns:
+				str: text shorted
+			"""
+			if len(text) > leng:
+				app.showBanner(
+					title='¡Atención!',
+					text='La longitud de \'{}\' no puede ser mayor de {}.'.format(name, leng)
+				)
+			return text[:leng]
+
+		def removeNumbers(text:str) -> str:
+			""" We remove the numbers are in the field (if these are
+				not valid).
+			Args:
+				text (str): field text
+			Returns:
+				str: The same text but without numbers.
+			"""
+			nums = set('0123456789') & set(text)
+			if nums:
+				app.openDialog(
+					title='Atención',
+					text='No se permiten números en el nombre o apellido.'
+				)
+				for num in nums:
+					text = text.replace(num, '')
+
+			return text
+
+		def removeChars(text:str, text_alert:str, chars:set) -> str:
+			"""	We get the chars are in field and we
+				remove them.
+			Args:
+				text (str): Field text.
+				text_alert (str): Text to show on alert.
+				chars (set): Numbers contained in the field.
+			Returns:
+				str: Text of the field, but without these chars.
+			"""
+			if chars:
+				app.showBanner(
+					title='¡Atención!',
+					text="{}.".format(text_alert)
+				)
+				for char in chars:
+					text = text.replace(char, '')
+
+			return text
+
+		def validPassword(text:str) -> None:
+			"""	We validate if password is valid for an UANL
+				password (At least: 1 capital, 1 lower, 1 number).
+			Args:
+				text (str): Field text.
+			Returns: None
+			"""
+			title = '¡Contraseña Invalida!'
+			if len(text) > 7: # and len(text) < 17: ## We validate max length in 'shortFieldText' function.
+				lower = 'abcdefghijklmnñopqrstuvwxyz'
+				if set(lower) & set(text):
+					if set(lower.upper()) & set(text):
+						if set('0123456789') & set(text):
+							pass # Valid password
+						else:
+							app.openDialog(
+								title=title,
+								text='La contraseña debe de tener al menos un número.'
+							)
+					else:
+						app.openDialog(
+							title=title,
+							text='La contraseña debe de tener al menos una letra mayúscula.'
+						)
+				else:
+					app.openDialog(
+						title=title,
+						text='La contraseña debe de tener al menos una letra minuscula.'
+					)
+			else:
+				app.openDialog(
+					title=title,
+					text='La contraseña debe tener una longitud de al menos 8 carateres y máximo 16.'
+				)
+		
+		if field.active:
+			text = shortFieldText(field.hint_text)
+			chars = '¬°!"#$%/()=\'?\\¿¡´¨*+~{^[]},;.-_|:' # invalid chars
+			text_alert = 'Este campo no admite caracteres especiales'
+			text = removeChars(text, text_alert, set(text) & set(chars))
+			if 'classroom' in field.name:
+				text = text.upper()
+				chars = chars[:len(chars)-2]
+				text_alert += " (excepciones: \'|\', \':\')" # chars valid only for classroom field.
+
+			if 'name' in field.name:
+				text = text.title()
+				text = removeNumbers(text)
+
+			elif 'pass' in field.name and 'add' not in field.name and field.focus == False:
+				validPassword(text)
+
+			field.text = text
+		else:
+			field.focus = False
 
 class FSearcher(MDTextFieldRect):
 	''''''
@@ -227,52 +332,6 @@ class Rectory(Screen):
 
 		else:
 			self.secondary_tab = tab
-
-
-	def text_validate(self, field:object, text:str, leng:int) -> None:
-		""" Get a field, its name and text too. If text is not like is
-			required in database, we modify it. Finally we update it.
-		Args:
-			field (object): Field we are writing.
-			text (str): Text of field.
-			leng (int): Maximum length for the field.
-		Returns: None
-		"""
-		if field.active:
-			if 'name' in field.name:
-				text = text.title()
-				
-				nums = set('0123456789') & set(text)
-				if nums:
-					app.openDialog(
-						title='Atención',
-						text='No se permiten números en el nombre o apellido.'
-					)
-					for num in nums:
-						text = text.replace(num, '')
-
-			elif 'classroom' in field.name:
-				text = text.upper()
-
-			chars = '¬°!"#$%/()=\'?\\¿¡´¨*+~{^[]},;.-_'
-			text_alert = 'Este campo no admite caracteres especiales'
-			if 'classroom' not in field.name:
-				chars += '|:'
-				text_alert += ' (excepciones: \'|\', \':\')'
-			text_alert += '.'
-			
-			chars = set(text) & set(chars)
-			if chars:
-				app.showBanner(
-					title='¡Atención!',
-					text=text_alert
-				)
-				for char in chars:
-					text = text.replace(char, '')
-
-			field.text = text
-		else:
-			field.text = ''
 
 	'''
 	def setWidget(self, wdg:object):

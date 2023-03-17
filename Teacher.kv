@@ -140,7 +140,11 @@
                                 id: upd_enrollment
                                 name: 'upd_enrollment'
 
-                                hint_text: 'Matricula'
+                                hint_text: 'Matricula'                                
+                                input_filter: 'int'
+                                query: "GetDataTeacher '{}'".format(self.text)
+                                widgets: [upd_middle_name,upd_last_name,upd_name,upd_faculties,upd_careers,upd_email,upd_pass]
+                                buttons: [upd_cancel, upd_save]
                                 
                             FTextField:
                                 id: upd_middle_name
@@ -200,7 +204,7 @@
 
                                 hint_text: 'Contraseña'
                                 disabled: True
-                                active: False
+                                active: True
                                 leng: 16
 
                             MDFloatLayout:
@@ -251,6 +255,10 @@
                                 name: 'del_enrollment'
 
                                 hint_text: 'Matricula'
+                                input_filter: 'int'
+                                query: "GetDataTeacher '{}'".format(self.text)
+                                widgets: [del_middle_name,del_last_name,del_name,del_faculties,del_careers,del_email,del_pass]
+                                buttons: [del_cancel, del_save]
                                 
                             FTextField:
                                 id: del_middle_name

@@ -16,34 +16,9 @@
 
                 title: 'Agregar'
 
-                MDBoxLayout:
-                    orientation: 'vertical'
-                    size_hint: (.35, .95)
-                    pos_hint: {'center_x': .5, 'center_y': .5}
-                    padding: dp(11), dp(0), dp(11), dp(5)
+                FBoxLayout:
                     spacing: dp(5)
                     
-                    canvas.before:
-                        Color:
-                            rgba: (1, 1, 1, 1)
-                        
-                        RoundedRectangle:
-                            size: self.size
-                            pos: self.pos
-                        
-                        Color:
-                            rgba: (.5, .5, .5, 1)
-                        
-                        Line:
-                            rounded_rectangle: [self.pos[0], self.pos[1], self.size[0], self.size[1], 10, 10, 10, 10]
-                            width: 1.5
-                        
-                        Color:
-                            rgba: (237/255, 162/255, 22/255, .5)
-                        
-                        Line:
-                            rounded_rectangle: [self.pos[0], self.pos[1], self.size[0], self.size[1], 10, 10, 10, 10]
-
                     FLabel:
                         text: '[b][size=20][color=#05396E]Datos del Empleado[/color][/size][/b]'
                         
@@ -97,7 +72,7 @@
                         hint_text: 'Contraseña'
                         active: False
                         leng: 16
-
+                    
                     MDFloatLayout:
                         cols: 1
                         size_hint_y: None
@@ -120,34 +95,9 @@
 
                 title: 'Actualizar'
 
-                MDBoxLayout:
-                    orientation: 'vertical'
-                    size_hint: (.35, .95)
-                    pos_hint: {'center_x': .5, 'center_y': .5}
-                    padding: dp(11), dp(0), dp(11), dp(5)
+                FBoxLayout:
                     spacing: dp(5)
                     
-                    canvas.before:
-                        Color:
-                            rgba: (1, 1, 1, 1)
-                        
-                        RoundedRectangle:
-                            size: self.size
-                            pos: self.pos
-                        
-                        Color:
-                            rgba: (.5, .5, .5, 1)
-                        
-                        Line:
-                            rounded_rectangle: [self.pos[0], self.pos[1], self.size[0], self.size[1], 10, 10, 10, 10]
-                            width: 1.5
-                        
-                        Color:
-                            rgba: (237/255, 162/255, 22/255, .5)
-                        
-                        Line:
-                            rounded_rectangle: [self.pos[0], self.pos[1], self.size[0], self.size[1], 10, 10, 10, 10]
-
                     FLabel:
                         text: '[b][size=20][color=#05396E]Datos del Empleado[/color][/size][/b]'
                         
@@ -159,6 +109,10 @@
                         name: 'upd_enrollment'
 
                         hint_text: 'Matricula'
+                        input_filter: 'int'
+                        query: "GetDataEmployee '{}'".format(self.text)
+                        widgets: [upd_middle_name,upd_last_name,upd_name,upd_email,upd_pass]
+                        buttons: [upd_cancel, upd_save]
                         
                     FTextField:
                         id: upd_middle_name
@@ -202,7 +156,7 @@
 
                         hint_text: 'Contraseña'
                         disabled: True
-                        active: False
+                        active: True
                         leng: 16
 
                     MDFloatLayout:
@@ -230,34 +184,9 @@
 
                 title: 'Eliminar'
 
-                MDBoxLayout:
-                    orientation: 'vertical'
-                    size_hint: (.35, .95)
-                    pos_hint: {'center_x': .5, 'center_y': .5}
-                    padding: dp(11), dp(0), dp(11), dp(5)
+                FBoxLayout:
                     spacing: dp(5)
                     
-                    canvas.before:
-                        Color:
-                            rgba: (1, 1, 1, 1)
-                        
-                        RoundedRectangle:
-                            size: self.size
-                            pos: self.pos
-                        
-                        Color:
-                            rgba: (.5, .5, .5, 1)
-                        
-                        Line:
-                            rounded_rectangle: [self.pos[0], self.pos[1], self.size[0], self.size[1], 10, 10, 10, 10]
-                            width: 1.5
-                        
-                        Color:
-                            rgba: (237/255, 162/255, 22/255, .5)
-                        
-                        Line:
-                            rounded_rectangle: [self.pos[0], self.pos[1], self.size[0], self.size[1], 10, 10, 10, 10]
-                
                     FLabel:
                         text: '[b][size=20][color=#05396E]Datos del Empleado[/color][/size][/b]'
                         
@@ -269,6 +198,10 @@
                         name: 'del_enrollment'
 
                         hint_text: 'Matricula'
+                        input_filter: 'int'
+                        query: "GetDataEmployee '{}'".format(self.text)
+                        widgets: [del_middle_name,del_last_name,del_name,del_email,del_pass]
+                        buttons: [del_cancel, del_save]
                         
                     FTextField:
                         id: del_middle_name
