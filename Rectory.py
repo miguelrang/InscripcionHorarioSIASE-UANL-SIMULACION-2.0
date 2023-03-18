@@ -11,7 +11,7 @@ from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.label import MDLabel
 from kivymd.uix.textfield import MDTextFieldRect, MDTextField#Round
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.button import MDRaisedButton, MDFlatButton
+from kivymd.uix.button import MDRaisedButton, MDFlatButton, MDIconButton
 from kivymd.uix.menu import MDDropdownMenu
 #from kivymd.uix.list import OneLineIconListItem
 
@@ -48,8 +48,15 @@ class Schedule(MDFloatLayout, MDTabsBase):
 
 Builder.load_file("Form.kv")
 class FBoxLayout(MDBoxLayout):
-	''''''
+	def __init__(self, **kwargs):
+		super(FBoxLayout, self).__init__(**kwargs)
+
+	
 class FFinder(MDTextField):
+	def __init__(self, **kwargs):
+		super(FFinder, self).__init__(**kwargs)
+
+
 	def text_validate(self, this:object, query:str, widgets:list, buttons:list) -> None:
 		"""	Get this field (ffinder), we validate the input.
 			get_data_&&_fill_and_enable_fields if user_exist_||_data_exist else show_banner
@@ -86,7 +93,10 @@ class FFinder(MDTextField):
 			
 
 class FLabel(MDLabel):
-	''''''
+	def __init__(self, **kwargs):
+		super(FLabel, self).__init__(**kwargs)
+
+	
 class FTextField(MDTextFieldRect):
 	def __init__(self, **kwargs):
 		super(FTextField, self).__init__(**kwargs)
@@ -211,15 +221,159 @@ class FTextField(MDTextFieldRect):
 		else:
 			field.focus = False
 
-class FSearcher(MDTextFieldRect):
-	''''''
-class FKardex(Button):
-	''''''
-class FCancelButton(MDFlatButton):
-	''''''
-class FActionButton(MDRaisedButton):
-	''''''
 
+class FSearcher(MDTextFieldRect):
+	def __init__(self, **kwargs):
+		super(FSearcher, self).__init__(**kwargs)
+		self.faculties = []
+		self.careers:list = None
+
+		self.menu = MDDropdownMenu(
+			position='auto',
+			width_mult=7.1
+		)
+
+
+	def setFaculties(self):
+		faculties:list = app.execute('GetFaculties')
+		self.faculties = []
+		for facu in faculties:
+			self.faculties.append(facu[0])
+
+
+	def getFaculties(self, selected_faculties:list, enable_faculties:list) -> list:
+		if selected_faculties != [''] and selected_faculties != []:
+			for fac in selected_faculties:
+				enable_faculties.remove(fac)
+
+		return enable_faculties
+
+
+	def getCareers(self, selected_careers:list, selected_faculties:list) -> list:
+		enable_careers = []
+		for faculty in selected_faculties:
+			data = app.execute("GetCareers '{}'".format(faculty))
+			for career in data:
+				enable_careers.append(career[0])
+
+		if selected_careers != [''] and selected_faculties != []:
+			for career in selected_careers:
+				enable_careers.remove(career)
+
+		return enable_careers
+
+
+	def showData(self, this:object, action:str, faculties=None, careers=None) -> None:
+		"""
+		Args:
+			this (object): Main field we are editing.
+			action (str): This var helps us to know what specific actions to do.
+			faculties (list): A list that has all faculties.
+			careers (object): Field where we would show the enable careers (this
+							  depends chosen faculties). 
+		"""
+		def on_release(field:object, x:str):
+			n = field.text.split('; ')
+			if n != ['']:
+				n.append(x)
+			else:
+				n = [x]
+			field.text = '; '.join(n)
+			self.menu.dismiss()
+		#
+		
+		if action == 'faculties':
+			self.setFaculties()
+			if len(this.text.split('; ')) < 3:
+				data:list = self.getFaculties(this.text.split('; '), self.faculties.copy())
+				menu_items = [{"text":facu,"viewclass":"OneLineListItem","on_release": lambda x=facu: on_release(this, x)} for facu in data]
+				self.menu.caller=this
+				self.menu.items=menu_items
+				#self.menu.max_height=3
+				self.menu.open()
+			else:
+				app.openDialog(
+					title='¡Número Máximo de Facultades!',
+					text='Solo es posible seleccionar 3 facultades ya que solo es posible cursar un total de 3 carreras en la UANL.'
+				)
+
+		elif action == 'careers':
+			faculties = faculties.text.split('; ')
+			if faculties != [''] and faculties != []:
+				if len(this.text.split('; ')) < 3:
+					enable_careers:list = self.getCareers(this.text.split('; '), faculties)
+					if enable_careers:
+						menu_items = [{"text":career,"viewclass":"OneLineListItem","on_release": lambda x=career: on_release(this, x)} for career in enable_careers]
+						self.menu.caller=this
+						self.menu.items=menu_items
+						self.menu.open()
+				else:
+					app.openDialog(
+						title='¡Número Máximo de Carreras!',
+						text='Solo es posible cursar o haber cursado un total de 3 carreras en la UANL.'
+					)
+			else:
+				app.showBanner(
+					title='¡Input Invalido!',
+					text='Antes debes seleccionar al menos una facultad.'
+				)
+
+
+	def text_validate(self, this:object, action:str, faculties:object, careers:object):
+		if action == 'faculties':
+			chosen = careers.text.split('; ')
+			if chosen != [''] and chosen != []:
+				enable_careers:list = self.getCareers(chosen, this.text.split('; '))
+				careers.text:str = '; '.join(set(enable_careers) & set(chosen))
+
+
+class FIcon(MDIconButton):
+	def __init__(self, **kwargs):
+		super(FIcon, self).__init__(**kwargs)
+
+
+	def alterField(self, button:object, field:object, action:str, position:str):
+		data = field.text.split('; ')
+		if field.text != '':
+			if action == 'plus': # +
+				if position == 'left':
+					pass 
+				else: # right
+					pass
+			else: # -
+				if position == 'left':
+					print('LEFT', data[0])
+					print(data)
+					data.remove(data[0])
+					print(data)
+				else: # right
+					print('LEFT', data[len(data)-1])
+					print(data)
+					data.remove(data[len(data)-1])
+					print(data)
+				field.text = '; '.join(data)
+		else:
+			app.showBanner(
+				title='¡Sin {}!'.format(field.hint_text),
+				text='No es posible quitar {} de este campo porque esta vacío.'.format(field.hint_text)
+			)
+
+
+class FKardex(Button):
+	def __init__(self, **kwargs):
+		super(FKardex, self).__init__(**kwargs)
+
+	
+class FCancelButton(MDFlatButton):
+	def __init__(self, **kwargs):
+		super(FCancelButton, self).__init__(**kwargs)
+
+	
+class FActionButton(MDRaisedButton):
+	def __init__(self, **kwargs):
+		super(FActionButton, self).__init__(**kwargs)
+
+	
 class Rectory(Screen):
 	def __init__(self, **kwargs):
 		super(Rectory, self).__init__(**kwargs)

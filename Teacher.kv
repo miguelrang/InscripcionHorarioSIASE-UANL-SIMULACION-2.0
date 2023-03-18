@@ -18,7 +18,7 @@
 
                 FBoxLayout:
                     ScrollView:
-                        scroll_type: ["bars"]
+                        scroll_type: ["bars", "content"]
                         bar_color: (.9, .9, .9, .9)
                         bar_width: dp(20)
                         do_scroll_y: True
@@ -58,20 +58,82 @@
                                 active: True
                                 leng: 50
                             
-                            FSearcher:
-                                id: add_faculties
-                                name: 'add_faculties'
+                            MDGridLayout:
+                                cols: 3
+                                spacing: dp(3)
+                                padding: dp(1), dp(0), dp(1), dp(0)
+                                size_hint_y: None
+                                size: (self.size[0], 50)
 
-                                hint_text: 'Facultades'
-                                leng: 150
-                            
-                            FSearcher:
-                                id: add_careers
-                                name: 'add_careers'
+                                FIcon:
+                                    id: add_left_faculty
+                                    name: 'add_left_faculty'
 
-                                hint_text: 'Carreras'
-                                leng: 240
-                            
+                                    icon: 'minus'
+                                    disabled: True
+                                    field: add_faculties
+                                    position: 'left'
+                                    
+                                FSearcher:
+                                    id: add_faculties
+                                    name: 'add_faculties'
+
+                                    hint_text: 'Facultades'
+                                    action: 'faculties'
+                                    careers: add_careers
+                                    leng: 150    
+                                    on_text:
+                                        if self.text == '':\
+                                        add_left_faculty.disabled, add_right_faculty.disabled = True, True
+                                        else:\
+                                        add_left_faculty.disabled, add_right_faculty.disabled = False, False
+                                FIcon:
+                                    id: add_right_faculty
+                                    name: 'add_right_faculty'
+
+                                    icon: 'minus'
+                                    disabled: True
+                                    field: add_faculties
+                                    position: 'right'
+
+                            MDGridLayout:
+                                cols: 3
+                                spacing: dp(3)
+                                padding: dp(1), dp(0), dp(1), dp(0)
+                                size_hint_y: None
+                                size: (self.size[0], 50)
+
+                                FIcon:
+                                    id: add_left_career
+                                    name: 'add_left_career'
+
+                                    icon: 'minus'
+                                    disabled: True
+                                    field: add_careers
+                                    position: 'left'
+            
+                                FSearcher:
+                                    id: add_careers
+                                    name: 'add_careers'
+
+                                    hint_text: 'Carreras'
+                                    action: 'careers'
+                                    faculties: add_faculties
+                                    leng: 240
+                                    on_text:
+                                        if self.text == '':\
+                                        add_left_career.disabled, add_right_career.disabled = True, True
+                                        else:\
+                                        add_left_career.disabled, add_right_career.disabled = False, False
+                                FIcon:
+                                    id: add_right_career
+                                    name: 'add_right_career'
+
+                                    icon: 'minus'
+                                    disabled: True
+                                    field: add_careers
+                                    position: 'right'
+            
                             FTextField:
                                 id: add_enrollment
                                 name: 'add_enrollment'
@@ -120,7 +182,7 @@
 
                 FBoxLayout:
                     ScrollView:
-                        scroll_type: ["bars"]
+                        scroll_type: ["bars", "content"]
                         bar_color: (.9, .9, .9, .9)
                         bar_width: dp(20)
                         do_scroll_y: True
@@ -144,7 +206,7 @@
                                 input_filter: 'int'
                                 query: "GetDataTeacher '{}'".format(self.text)
                                 widgets: [upd_middle_name,upd_last_name,upd_name,upd_faculties,upd_careers,upd_email,upd_pass]
-                                buttons: [upd_cancel, upd_save]
+                                buttons: [upd_cancel, upd_save, upd_left_faculty, upd_left_career, upd_right_faculty, upd_right_career]
                                 
                             FTextField:
                                 id: upd_middle_name
@@ -173,21 +235,79 @@
                                 active: True
                                 leng: 50
                             
-                            FSearcher:
-                                id: upd_faculties
-                                name: 'upd_faculties'
+                            MDGridLayout:
+                                cols: 3
+                                spacing: dp(3)
+                                padding: dp(1), dp(0), dp(1), dp(0)
+                                size_hint_y: None
+                                size: (self.size[0], 50)
 
-                                hint_text: 'Facultades'
-                                disabled: True
-                                leng: 150
-                            
-                            FSearcher:
-                                id: upd_careers
-                                name: 'upd_careers'
+                                FIcon:
+                                    id: upd_left_faculty
+                                    name: 'upd_left_faculty'
 
-                                hint_text: 'Carreras'
-                                disabled: True
-                                leng: 240
+                                    icon: 'minus'
+                                    disabled: True
+                                    field: upd_faculties
+                                    position: 'left'
+                                    
+                                FSearcher:
+                                    id: upd_faculties
+                                    name: 'upd_faculties'
+
+                                    hint_text: 'Facultades'
+                                    disabled: True
+                                    action: 'faculties'
+                                    careers: add_careers
+                                    leng: 150    
+                                    on_text:
+                                        if self.text == '':\
+                                        upd_left_faculty.disabled, upd_right_faculty.disabled = True, True
+                                        else:\
+                                        upd_left_faculty.disabled, upd_right_faculty.disabled = False, False
+                                FIcon:
+                                    id: upd_right_faculty
+                                    name: 'upd_right_faculty'
+
+                                    icon: 'minus'
+                                    disabled: True
+                                    field: upd_faculties
+                                    position: 'right'
+                                    
+                            MDGridLayout:
+                                cols: 3
+                                spacing: dp(3)
+                                padding: dp(1), dp(0), dp(1), dp(0)
+                                size_hint_y: None
+                                size: (self.size[0], 50)
+
+                                FIcon:
+                                    id: upd_left_career
+                                    name: 'upd_left_career'
+
+                                    icon: 'minus'
+                                    disabled: True
+                                    field: upd_careers
+                                    position: 'left'
+            
+                                FSearcher:
+                                    id: upd_careers
+                                    name: 'upd_careers'
+
+                                    hint_text: 'Carreras'
+                                    disabled: True
+                                    action: 'careers'
+                                    faculties: upd_faculties
+                                    leng: 240
+                                
+                                FIcon:
+                                    id: upd_right_career
+                                    name: 'upd_right_career'
+
+                                    icon: 'minus'
+                                    disabled: True
+                                    field: upd_careers
+                                    position: 'right'
 
                             FTextField:
                                 id: upd_email
@@ -234,7 +354,7 @@
 
                 FBoxLayout:
                     ScrollView:
-                        scroll_type: ["bars"]
+                        scroll_type: ["bars", "content"]
                         bar_color: (.9, .9, .9, .9)
                         bar_width: dp(20)
                         do_scroll_y: True

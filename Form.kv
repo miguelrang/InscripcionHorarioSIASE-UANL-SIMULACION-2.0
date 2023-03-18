@@ -63,6 +63,37 @@
     multiline: False
     line_anim: False
     leng: None
+    action: None # str
+    faculties: None # list of object
+    careers: None # object
+    on_text:
+        root.text_validate(this=self, action=self.action, faculties=self.faculties, careers=self.careers)
+    on_focus:
+        if self.focus == True:\
+        self.focus = False
+        else:\
+        root.showData(this=self, action=self.action, faculties=self.faculties, careers=self.careers)
+
+<FIcon>:
+    field: None
+    position: None
+    md_bg_color_disabled: (0, 0, 0, 0)
+    on_release:
+        root.alterField(button=self, field=self.field, action=self.icon.replace('-trick', ''), position=self.position)
+    canvas.before:
+        Color:
+            rgba: (213/255, 235/255, 223/255, .7)
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    canvas.after:
+        Color:
+            rgba: (0, 0, 0, 1)
+        
+        Line:
+            rectangle: self.pos[0], self.pos[1]+1, self.size[0], self.size[1]+1
+                                    
 
 <FKardex>:
     text: "Kardex"
