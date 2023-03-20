@@ -66,13 +66,14 @@
     action: None # str
     faculties: None # list of object
     careers: None # object
+    maxim: None
     on_text:
         root.text_validate(this=self, action=self.action, faculties=self.faculties, careers=self.careers)
     on_focus:
         if self.focus == True:\
         self.focus = False
         else:\
-        root.showData(this=self, action=self.action, faculties=self.faculties, careers=self.careers)
+        root.showData(this=self, action=self.action, maxim=self.maxim, faculties=self.faculties, careers=self.careers)
 
 <FIcon>:
     field: None

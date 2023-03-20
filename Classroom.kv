@@ -27,18 +27,42 @@
                     FLabel:
                         text: '[size=15][color=#EDA216]Las cuentas de rectoria tienen los permisos para agregas mas cuentas de la misma, además de cuentas para profesores, alumnos y agregar horarios.[/color][/size]'
                         
-                    FSearcher:
-                        id: add_faculty
-                        name: 'add_faculty'
+                    MDGridLayout:
+                        cols: 2
+                        spacing: dp(3)
+                        padding: dp(1), dp(0), dp(1), dp(0)
+                        size_hint_y: None
+                        size: (self.size[0], 50)
 
-                        hint_text: "Facultad"
-                        leng: 50
-                    
+                        FIcon:
+                            id: add_left_faculty
+                            name: 'add_left_faculty'
+
+                            icon: 'minus'
+                            disabled: True
+                            field: add_faculty
+                            position: 'left'
+                            
+                        FSearcher:
+                            id: add_faculty
+                            name: 'add_faculty'
+
+                            hint_text: 'Facultades'
+                            action: 'faculties'
+                            maxim: 1
+                            leng: 50    
+                            on_text:
+                                if self.text == '':\
+                                add_left_faculty.disabled = True
+                                else:\
+                                add_left_faculty.disabled = False
+
                     FTextField:
                         id: add_classroom
                         name: 'add_classroom'
 
                         hint_text: 'Nombre del Aula (Ej. (1): 201, (2): Laboratorio)'
+                        active: True
                         leng: 100
                     
                     FTextField:
@@ -46,6 +70,7 @@
                         name: 'add_banches'
 
                         hint_text: 'Bancos Disponibles'
+                        input_filter: 'int'
                         active: True
                         leng: 3
                     

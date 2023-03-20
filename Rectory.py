@@ -204,12 +204,12 @@ class FTextField(MDTextFieldRect):
 			text = shortFieldText(field.hint_text)
 			chars = '¬°!"#$%/()=\'?\\¿¡´¨*+~{^[]},;.-_|:' # invalid chars
 			text_alert = 'Este campo no admite caracteres especiales'
-			text = removeChars(text, text_alert, set(text) & set(chars))
 			if 'classroom' in field.name:
 				text = text.upper()
 				chars = chars[:len(chars)-2]
 				text_alert += " (excepciones: \'|\', \':\')" # chars valid only for classroom field.
-
+			text = removeChars(text, text_alert, set(text) & set(chars))
+			
 			if 'name' in field.name:
 				text = text.title()
 				text = removeNumbers(text)
@@ -263,7 +263,7 @@ class FSearcher(MDTextFieldRect):
 		return enable_careers
 
 
-	def showData(self, this:object, action:str, faculties=None, careers=None) -> None:
+	def showData(self, this:object, action:str, maxim:int, faculties=None, careers=None) -> None:
 		"""
 		Args:
 			this (object): Main field we are editing.
@@ -284,7 +284,10 @@ class FSearcher(MDTextFieldRect):
 		
 		if action == 'faculties':
 			self.setFaculties()
-			if len(this.text.split('; ')) < 3:
+			chosen = this.text.split('; ')
+			if chosen == ['']:
+				chosen = []
+			if len(chosen) < maxim:
 				data:list = self.getFaculties(this.text.split('; '), self.faculties.copy())
 				menu_items = [{"text":facu,"viewclass":"OneLineListItem","on_release": lambda x=facu: on_release(this, x)} for facu in data]
 				self.menu.caller=this
@@ -294,13 +297,13 @@ class FSearcher(MDTextFieldRect):
 			else:
 				app.openDialog(
 					title='¡Número Máximo de Facultades!',
-					text='Solo es posible seleccionar 3 facultades ya que solo es posible cursar un total de 3 carreras en la UANL.'
+					text='Solo es posible seleccionar {} facultad(es).'.format(maxim)
 				)
 
 		elif action == 'careers':
 			faculties = faculties.text.split('; ')
 			if faculties != [''] and faculties != []:
-				if len(this.text.split('; ')) < 3:
+				if len(this.text.split('; ')) < maxim:
 					enable_careers:list = self.getCareers(this.text.split('; '), faculties)
 					if enable_careers:
 						menu_items = [{"text":career,"viewclass":"OneLineListItem","on_release": lambda x=career: on_release(this, x)} for career in enable_careers]
@@ -310,7 +313,7 @@ class FSearcher(MDTextFieldRect):
 				else:
 					app.openDialog(
 						title='¡Número Máximo de Carreras!',
-						text='Solo es posible cursar o haber cursado un total de 3 carreras en la UANL.'
+						text='Solo es posible seleccionar un total de {} carrera(s) en la UANL.'.format(maxim)
 					)
 			else:
 				app.showBanner(
@@ -320,7 +323,7 @@ class FSearcher(MDTextFieldRect):
 
 
 	def text_validate(self, this:object, action:str, faculties:object, careers:object):
-		if action == 'faculties':
+		if action == 'faculties' and careers != None:
 			chosen = careers.text.split('; ')
 			if chosen != [''] and chosen != []:
 				enable_careers:list = self.getCareers(chosen, this.text.split('; '))

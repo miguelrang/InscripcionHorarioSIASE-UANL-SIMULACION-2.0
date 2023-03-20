@@ -81,6 +81,7 @@
                                     hint_text: 'Facultades'
                                     action: 'faculties'
                                     careers: add_careers
+                                    maxim: 3
                                     leng: 150    
                                     on_text:
                                         if self.text == '':\
@@ -119,6 +120,7 @@
                                     hint_text: 'Carreras'
                                     action: 'careers'
                                     faculties: add_faculties
+                                    maxim: 10
                                     leng: 240
                                     on_text:
                                         if self.text == '':\
@@ -259,6 +261,7 @@
                                     disabled: True
                                     action: 'faculties'
                                     careers: add_careers
+                                    maxim: 3
                                     leng: 150    
                                     on_text:
                                         if self.text == '':\
@@ -298,6 +301,7 @@
                                     disabled: True
                                     action: 'careers'
                                     faculties: upd_faculties
+                                    maxim: 10
                                     leng: 240
                                 
                                 FIcon:
@@ -414,6 +418,7 @@
                                 hint_text: 'Facultades'
                                 disabled: True
                                 leng: 150
+                                maxim: 3
                             
                             FSearcher:
                                 id: del_careers
@@ -422,6 +427,7 @@
                                 hint_text: 'Carreras'
                                 disabled: True
                                 leng: 240
+                                maxim: 10
 
                             FTextField:
                                 id: del_email
